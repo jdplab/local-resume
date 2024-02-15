@@ -1,0 +1,14 @@
+- name: Mount DB Share
+  hosts: dbservers
+  become: yes
+
+  tasks:
+    - name: Mount NFS Share
+      mount:
+        name: /mnt/nfs
+        src: "192.168.69.200/volume1/resume-db"
+        fstype: nfs
+        opts: defaults
+        state: mounted
+
+
