@@ -20,7 +20,6 @@ resource "proxmox_vm_qemu" "db_server" {
   vmid = var.db_vmid
   target_node = var.proxmox_host
   clone = var.template_name
-  full_clone  = "true"
   agent = 1
   os_type = "cloud-init"
   cores = 2
@@ -30,11 +29,11 @@ resource "proxmox_vm_qemu" "db_server" {
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
   disk {
-    slot = 0
     size = "10G"
     type = "scsi"
     storage = var.storage_location
     iothread = 1
+    ssd = 1
   }
 
   network {
@@ -57,7 +56,6 @@ resource "proxmox_vm_qemu" "web_server" {
   vmid = var.web_vmid 
   target_node = var.proxmox_host
   clone = var.template_name
-  full_clone  = "true"
   agent = 1
   os_type = "cloud-init"
   cores = 2
@@ -67,11 +65,11 @@ resource "proxmox_vm_qemu" "web_server" {
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
   disk {
-    slot = 0
     size = "10G"
     type = "scsi"
     storage = var.storage_location
     iothread = 1
+    ssd = 1
   }
 
   network {
