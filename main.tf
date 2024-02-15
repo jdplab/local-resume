@@ -4,10 +4,6 @@ terraform {
       source = "telmate/proxmox"
       version = "3.0.1-rc1"
     }
-    linux = {
-      source = "TelkomIndonesia/linux"
-      version = "0.7.0"
-    }
   }
 }
 
@@ -23,7 +19,7 @@ resource "proxmox_vm_qemu" "db_server" {
   name = var.dbserver_name
   vmid = var.db_vmid
   target_node = var.proxmox_host
-  clone = var.template_name
+  clone = var.dbtemplate_name
   cloudinit_cdrom_storage = var.storage_location
   agent = 1
   os_type = "cloud-init"
@@ -64,7 +60,7 @@ resource "proxmox_vm_qemu" "web_server" {
   name = var.webserver_name
   vmid = var.web_vmid
   target_node = var.proxmox_host
-  clone = var.template_name
+  clone = var.webtemplate_name
   cloudinit_cdrom_storage = var.storage_location
   agent = 1
   os_type = "cloud-init"
