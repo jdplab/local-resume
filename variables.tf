@@ -65,3 +65,7 @@ variable "ssh_user" {
 variable "ssh_pw" {
     default = "JP12345!"
 }
+
+variable "disk_size" {
+    default = 10
+}
