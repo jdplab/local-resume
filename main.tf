@@ -15,7 +15,7 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "db_server" {
-  count = 1 
+  count = 0 
   name = var.dbserver_name
   vmid = var.db_vmid
   target_node = var.proxmox_host
