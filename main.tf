@@ -6,21 +6,21 @@ terraform {
     }
   }
 }
+
 provider "proxmox" {
-  pm_api_url = "https://192.168.69.251:8006/api2/json"
-  # api token id is in the form of: <username>@pam!<tokenId>
-  pm_api_token_id = "terraform-prov@pve!terraformToken"
-  # this is the full secret wrapped in quotes. don't worry, I've already deleted this from my proxmox cluster by the time you read this post
-  pm_api_token_secret = "a7b5c294-5bbf-4736-aa6a-ce0d23616307"
-  # leave tls_insecure set to true unless you have your proxmox SSL certificate situation fully sorted out (if you do, you will know)
+  pm_api_url = var.proxmox_api_url
+  pm_api_token_id = var.proxmox_api_token_id
+  pm_api_token_secret = var.proxmox_api_token_secret
   pm_tls_insecure = true
 }
 
-resource "proxmox_vm_qemu" "test_server" {
+resource "proxmox_vm_qemu" "db_server" {
   count = 1 
-  name = "test-vm-${count.index + 1}" 
+  name = var.dbserver_name
+  vmid = var.db_vmid
   target_node = var.proxmox_host
   clone = var.template_name
+  full_clone  = "true"
   agent = 1
   os_type = "cloud-init"
   cores = 2
@@ -33,7 +33,7 @@ resource "proxmox_vm_qemu" "test_server" {
     slot = 0
     size = "10G"
     type = "scsi"
-    storage = "jp-emnas01"
+    storage = var.storage_location
     iothread = 1
   }
 
@@ -41,11 +41,49 @@ resource "proxmox_vm_qemu" "test_server" {
     model = "virtio"
     bridge = "vmbr0"
   }
-  # not sure exactly what this is for. presumably something about MAC addresses and ignore network changes during the life of the VM
+
   lifecycle {
     ignore_changes = [
       network,
     ]
   }
-  ipconfig0 = "ip=192.168.69.6${count.index + 1}/24,gw=192.168.69.1"
+
+  ipconfig0 = "ip=192.168.69.61/24,gw=192.168.69.1"
+}
+
+resource "proxmox_vm_qemu" "web_server" {
+  count = 1 
+  name = var.webserver_name
+  vmid = var.web_vmid 
+  target_node = var.proxmox_host
+  clone = var.template_name
+  full_clone  = "true"
+  agent = 1
+  os_type = "cloud-init"
+  cores = 2
+  sockets = 1
+  cpu = "host"
+  memory = 2048
+  scsihw = "virtio-scsi-pci"
+  bootdisk = "scsi0"
+  disk {
+    slot = 0
+    size = "10G"
+    type = "scsi"
+    storage = var.storage_location
+    iothread = 1
+  }
+
+  network {
+    model = "virtio"
+    bridge = "vmbr0"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      network,
+    ]
+  }
+
+  ipconfig0 = "ip=192.168.69.62/24,gw=192.168.69.1"
 }
