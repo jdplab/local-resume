@@ -34,8 +34,9 @@ resource "proxmox_vm_qemu" "db_server" {
     scsi {
       scsi0 {
         disk {
-          size = "10G"
+          size = 4096
           storage = var.storage_location
+          backup = 0
         }
       }
     }
