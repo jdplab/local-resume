@@ -36,6 +36,7 @@ resource "proxmox_vm_qemu" "db_server" {
         disk {
           size = 10
           storage = var.storage_location
+          backup = false
         }
       }
     }
@@ -76,6 +77,7 @@ resource "proxmox_vm_qemu" "web_server" {
         disk {
           size = 10
           storage = var.storage_location
+          backup = false
         }
       }
     }
