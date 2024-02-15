@@ -4,6 +4,10 @@ terraform {
       source = "telmate/proxmox"
       version = "3.0.1-rc1"
     }
+    linux = {
+      source = "TelkomIndonesia/linux"
+      version = "0.7.0"
+    }
   }
 }
 
