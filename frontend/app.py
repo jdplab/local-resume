@@ -26,4 +26,4 @@ def index():
     return render_template("index.html", visitor_count=count)
 
 if __name__ == "__main__":
-    app.run(debug=True)  # Set debug=False for production
+    app.run(host="0.0.0.0")
