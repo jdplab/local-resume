@@ -61,7 +61,7 @@
         recurse: yes
         owner: www-data
         group: www-data
-        mode: "0644"
+        mode: "0666"
 
     - name: Run flaskapp service
       service:
