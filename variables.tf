@@ -6,22 +6,6 @@ variable "webtemplate_name" {
     default = "ubuntu-webserver-cloudinit-template"
 }
 
-variable "dbtemplate_name" {
-    default = "ubuntu-dbserver-cloudinit-template"
-}
-
-variable "template_name" {
-    default = "ubuntu-2004-cloudinit-template"
-}
-
-variable "dbserver_name" {
-    default = "jp-resumedb"
-}
-
-variable "dbserver_ip" {
-    default = "192.168.69.61"
-}
-
 variable "webserver_name" {
     default = "jp-resumeweb"
 }
@@ -40,10 +24,6 @@ variable "proxmox_api_token_id" {
 
 variable "proxmox_api_token_secret" {
     default = "a7b5c294-5bbf-4736-aa6a-ce0d23616307"
-}
-
-variable "db_vmid" {
-    default = "601"
 }
 
 variable "web_vmid" {
