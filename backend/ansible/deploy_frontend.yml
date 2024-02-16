@@ -23,6 +23,10 @@
         dest: /etc/systemd/system
         force: true
 
+    - name: Reload systemctl daemon
+      command:
+        cmd: systemctl daemon-reload
+
     - name: Install pip
       apt:
         name: python3-pip
@@ -54,11 +58,12 @@
     - name: Run flaskapp service
       service:
         name: flaskapp
-        state: reloaded
+        state: restarted
         enabled: true
 
     - name: Reload nginx
       service:
         name: nginx
-        state: reloaded
+        state: restarted
+        enabled: true
 
