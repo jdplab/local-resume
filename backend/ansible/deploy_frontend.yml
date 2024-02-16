@@ -55,13 +55,20 @@
         opts: defaults
         state: mounted
 
-    - name: Set permissions
+    - name: Set permissions on mount point
       file:
-        path: /mnt
-        recurse: yes
+        path: /mnt/nfs
+        state: directory
         owner: www-data
         group: www-data
-        mode: "0666"
+        mode: "0660"
+
+    - name: Set permissions on database
+      file:
+        path: /mnt/nfs/visitors.db
+        owner: www-data
+        group: www-data
+        mode: "0660"
 
     - name: Run flaskapp service
       service:
