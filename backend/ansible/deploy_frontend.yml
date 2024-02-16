@@ -19,4 +19,4 @@
 
     - name: Reload nginx
       command:
-        cmd: nginx -t
+        cmd: systemctl reload nginx
