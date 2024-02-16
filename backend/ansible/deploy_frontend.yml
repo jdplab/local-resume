@@ -1,4 +1,4 @@
-- name: Deploy files to webserver
+- name: Configure webserver
   hosts: webservers
   remote_user: root
   become: yes
@@ -8,7 +8,7 @@
     - name: Copy frontend files
       copy:
         src: /var/lib/jenkins/workspace/Resume/frontend/
-        dest: /var/www/html/frontend/
+        dest: /srv/frontend/
         force: true
 
     - name: Copy nginx.conf
@@ -17,7 +17,40 @@
         dest: /etc/nginx
         force: true
 
+    - name: Install pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install Flask
+      pip:
+        name: flask
+        state: present
+
+    - name: Install uwsgi
+      pip:
+        name: uwsgi
+        state: present
+
+    - name: Install nfs-common package
+      apt:
+        name: nfs-common
+        state: present
+
+    - name: Mount NFS share
+      mount:
+        name: /mnt/nfs
+        src: "192.168.69.200:/volume1/resume-db"
+        fstype: nfs
+        opts: defaults
+        state: mounted
+
+    - name: Run uWSGI
+      command:
+        cmd: "uwsgi --ini /srv/frontend/flask.ini"
+
     - name: Reload nginx
       service:
         name: nginx
         state: reloaded
+
