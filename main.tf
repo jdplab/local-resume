@@ -48,7 +48,7 @@ resource "proxmox_vm_qemu" "db_server" {
 
   lifecycle {
     ignore_changes = [
-      network,
+      network,ciuser,qemu_os,
     ]
   }
 
@@ -89,7 +89,7 @@ resource "proxmox_vm_qemu" "web_server" {
 
   lifecycle {
     ignore_changes = [
-      network,
+      network,ciuser,qemu_os,
     ]
   }
 
