@@ -1,4 +1,4 @@
-- name: Deploy frontend files
+- name: Deploy files to webserver
   hosts: webservers
   remote_user: root
   become: yes
@@ -10,3 +10,13 @@
         src: /var/lib/jenkins/workspace/Resume/frontend/
         dest: /var/www/html/frontend/
         force: true
+
+    - name: Copy nginx.conf
+      copy:
+        src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
+        dest: /etc/nginx
+        force: true
+
+    -name: Reload nginx
+      command:
+        cmd: nginx -t
