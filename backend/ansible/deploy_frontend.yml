@@ -57,7 +57,7 @@
 
     - name: Set permissions
       file:
-        path: /mnt/nfs
+        path: /mnt
         recurse: yes
         owner: www-data
         group: www-data
