@@ -61,14 +61,14 @@
         state: directory
         owner: www-data
         group: www-data
-        mode: "0660"
+        mode: "0770"
 
     - name: Set permissions on database
       file:
         path: /mnt/nfs/visitors.db
         owner: www-data
         group: www-data
-        mode: "0660"
+        mode: "0770"
 
     - name: Run flaskapp service
       service:
