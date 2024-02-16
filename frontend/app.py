@@ -15,7 +15,6 @@ def get_visitor_count():
         return count
     except Exception as e:
         print("Error:", e)
-        count = 0
         return count
     finally:
         if connection:
