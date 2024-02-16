@@ -4,6 +4,7 @@ import sqlite3
 app = Flask(__name__)
 
 def get_visitor_count():
+    connection = None
     try:
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
