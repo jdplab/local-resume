@@ -18,5 +18,6 @@
         force: true
 
     - name: Reload nginx
-      command:
-        cmd: systemctl reload nginx
+      service:
+        name: nginx
+        state: reloaded
