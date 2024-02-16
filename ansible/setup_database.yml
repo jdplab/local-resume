@@ -5,6 +5,11 @@
   become_method: sudo
 
   tasks:
+    - name: Install nfs-common package
+      apt:
+        name: nfs-common
+        state: present
+    
     - name: Mount NFS Share
       mount:
         name: /mnt/nfs
@@ -12,5 +17,3 @@
         fstype: nfs
         opts: defaults
         state: mounted
-
-
