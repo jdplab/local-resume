@@ -16,6 +16,8 @@
         path: /srv/frontend
         recurse: yes
         mode: "0770"
+        user: www-data
+        group: www-data
 
     - name: Copy nginx.conf
       copy:
