@@ -11,6 +11,12 @@
         dest: /srv/frontend/
         force: true
 
+    - name: Set frontend folder permissions
+      file:
+        path: /srv/frontend
+        recurse: yes
+        mode: "0770"
+
     - name: Copy nginx.conf
       copy:
         src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
@@ -79,6 +85,5 @@
     - name: Reload nginx
       service:
         name: nginx
-        state: restarted
+        state: reloaded
         enabled: true
-
