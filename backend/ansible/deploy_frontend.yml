@@ -57,7 +57,7 @@
     
     - name: Set permissions on database
       command:
-        cmd: "chown www-data.www-data visitors.db"
+        cmd: "chown www-data.www-data /mnt/nfs/visitors.db"
 
     - name: Run flaskapp service
       service:
