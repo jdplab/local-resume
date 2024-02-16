@@ -17,6 +17,6 @@
         dest: /etc/nginx
         force: true
 
-    -name: Reload nginx
+    - name: Reload nginx
       command:
         cmd: nginx -t
