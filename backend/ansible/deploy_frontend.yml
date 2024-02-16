@@ -7,6 +7,6 @@
   tasks:
     - name: Copy frontend files
       copy:
-        src: ../../../frontend
-        dest: /var/www/html/frontend
-        force: yes
+        src: /var/lib/jenkins/workspace/Resume/frontend/
+        dest: /var/www/html/frontend/
+        force: true
