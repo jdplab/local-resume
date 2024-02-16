@@ -55,17 +55,13 @@
         opts: defaults
         state: mounted
 
-    - name: Set ownership on mount point
-      command:
-        cmd: "chown www-data.www-data /mnt/nfs"
-    
-    - name: Set ownership on database
-      command:
-        cmd: "chown www-data.www-data /mnt/nfs/visitors.db"
-
-    - name: Set permissions on database
-      command:
-        cmd: "chmod 644 /mnt/nfs/visitors.db"
+    - name: Set permissions
+      file:
+        path: /mnt/nfs
+        recurse: yes
+        owner: www-data
+        group: www-data
+        mode: "0644"
 
     - name: Run flaskapp service
       service:
