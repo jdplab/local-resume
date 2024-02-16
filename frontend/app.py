@@ -9,12 +9,13 @@ def get_visitor_count():
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
         cursor.execute("SELECT count FROM visitors")
-        count = cursor.fetchone()[0]
+        count = cursor.fetchone()
         cursor.execute("UPDATE visitors SET count = count + 1")
         connection.commit()
         return count
     except Exception as e:
         print("Error:", e)
+        count = 0
         return count
     finally:
         if connection:
