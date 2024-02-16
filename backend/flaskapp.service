@@ -3,7 +3,7 @@ Description=uWSGI instance to serve my flask resume app
 After=network.target
 
 [Service]
-User=root
+User=www-data
 WorkingDirectory=/srv/frontend
 ExecStart=/usr/local/bin/uwsgi --ini flask.ini
 
