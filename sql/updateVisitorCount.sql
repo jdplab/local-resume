@@ -1,1 +1,0 @@
-UPDATE visitors SET count = count + 1;

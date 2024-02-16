@@ -17,6 +17,12 @@
         dest: /etc/nginx
         force: true
 
+    - name: Copy flaskapp.service
+      copy:
+        src: /var/lib/jenkins/workspace/Resume/backend/flaskapp.service
+        dest: /etc/systemd/system
+        force: true
+
     - name: Install pip
       apt:
         name: python3-pip
@@ -45,9 +51,11 @@
         opts: defaults
         state: mounted
 
-    - name: Run uWSGI
-      command:
-        cmd: "uwsgi --ini /srv/frontend/flask.ini"
+    - name: Run flaskapp service
+      service:
+        name: flaskapp
+        state: reloaded
+        enabled: true
 
     - name: Reload nginx
       service:

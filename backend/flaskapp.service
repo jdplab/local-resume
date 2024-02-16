@@ -1,0 +1,11 @@
+[Unit]
+Description=uWSGI instance to serve my flask resume app
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/srv/frontend
+ExecStart=/srv/frontend/uwsgi --ini flask.ini
+
+[Install]
+WantedBy=multi-user.target
