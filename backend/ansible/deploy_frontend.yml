@@ -1,0 +1,13 @@
+- name: Deploy frontend files
+  hosts: webservers
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Copy frontend files
+      copy:
+        src: ./frontend
+        dest: /var/www/html/frontend
+        force: yes
+        
