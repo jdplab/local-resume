@@ -21,7 +21,6 @@ resource "proxmox_vm_qemu" "web_server" {
   target_node = var.proxmox_host
   clone = var.webtemplate_name
   onboot = true
-  automatic_reboot = false
   cloudinit_cdrom_storage = var.storage_location
   agent = 1
   os_type = "cloud-init"
