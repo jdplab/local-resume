@@ -49,7 +49,7 @@ resource "proxmox_vm_qemu" "web_server" {
 
   lifecycle {
     ignore_changes = [
-      network,ciuser,qemu_os,
+      network,ciuser,qemu_os,bootdisk,id,name,
     ]
   }
 
