@@ -10,6 +10,8 @@
         src: /var/lib/jenkins/workspace/Resume/frontend/
         dest: /srv/frontend/
         force: true
+      notify:
+        - Run flaskapp service
 
     - name: Set frontend folder permissions
       file:
