@@ -24,12 +24,16 @@
         src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
         dest: /etc/nginx
         force: true
+      notify:
+        - Reload nginx
 
     - name: Copy flaskapp.service
       copy:
         src: /var/lib/jenkins/workspace/Resume/backend/flaskapp.service
         dest: /etc/systemd/system
         force: true
+      notify:
+        - Run flaskapp service
 
     - name: Reload systemctl daemon
       command:
@@ -62,7 +66,11 @@
         fstype: nfs
         opts: defaults
         state: mounted
+      notify:
+        - Set permissions on mount point
+        - Set permissions on database
 
+  - handlers:
     - name: Set permissions on mount point
       file:
         path: /mnt/nfs
