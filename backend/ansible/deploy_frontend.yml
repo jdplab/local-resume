@@ -70,7 +70,7 @@
         - Set permissions on mount point
         - Set permissions on database
 
-  - handlers:
+  handlers:
     - name: Set permissions on mount point
       file:
         path: /mnt/nfs
