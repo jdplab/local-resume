@@ -10,8 +10,6 @@
         src: /var/lib/jenkins/workspace/Resume/frontend/
         dest: /srv/frontend/
         force: true
-      notify:
-        - Run flaskapp service
 
     - name: Set frontend folder permissions
       file:
@@ -26,17 +24,12 @@
         src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
         dest: /etc/nginx
         force: true
-      notify:
-        - Reload nginx
 
     - name: Copy flaskapp.service
       copy:
         src: /var/lib/jenkins/workspace/Resume/backend/flaskapp.service
         dest: /etc/systemd/system
         force: true
-      notify:
-        - Run flaskapp service
-        - Reload systemctl daemon
 
     - name: Install pip
       apt:
@@ -69,6 +62,22 @@
         - Set permissions on mount point
         - Set permissions on database
 
+    - name: Run flaskapp service
+      service:
+        name: flaskapp
+        state: restarted
+        enabled: true
+
+    - name: Reload systemctl daemon
+      command:
+        cmd: systemctl daemon-reload
+
+    - name: Reload nginx
+      service:
+        name: nginx
+        state: reloaded
+        enabled: true
+
   handlers:
     - name: Set permissions on mount point
       file:
@@ -85,18 +94,3 @@
         group: www-data
         mode: "0770"
 
-    - name: Run flaskapp service
-      service:
-        name: flaskapp
-        state: restarted
-        enabled: true
-
-    - name: Reload systemctl daemon
-      command:
-        cmd: systemctl daemon-reload
-
-    - name: Reload nginx
-      service:
-        name: nginx
-        state: reloaded
-        enabled: true
