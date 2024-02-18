@@ -71,27 +71,27 @@
         - Set permissions on mount point
         - Set permissions on database
 
-    - name: Install certbot
-      community.general.snap:
-        name: certbot
-        state: present
-        classic: true
+    #- name: Install certbot
+    #  community.general.snap:
+    #    name: certbot
+    #    state: present
+    #    classic: true
 
-    - name: Run certbot
-      command: certbot --nginx -d resume-dev.jon-polansky.com -n --agree-tos -q --email jon@jon-polansky.com
-      register: certbot_output
-      ignore_errors: yes
+    #- name: Run certbot
+    #  command: certbot --nginx -d resume-dev.jon-polansky.com -n --agree-tos -q --email jon@jon-polansky.com
+    #  register: certbot_output
+    #  ignore_errors: yes
 
-    - name: Show Certbot Output
-      debug:
-        var: certbot_output
+    #- name: Show Certbot Output
+    #  debug:
+    #    var: certbot_output
 
-    - name: Add Certbot Renewal Cron Job
-      cron:
-        name: "Renew SSL Certificates with Certbot"
-        minute: "0"
-        hour: "*/12"
-        job: "certbot renew --quiet"
+    #- name: Add Certbot Renewal Cron Job
+    #  cron:
+    #    name: "Renew SSL Certificates with Certbot"
+    #    minute: "0"
+    #    hour: "*/12"
+    #    job: "certbot renew --quiet"
 
     - name: Run flaskapp service
       service:
