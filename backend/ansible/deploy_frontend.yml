@@ -70,15 +70,13 @@
         - Set permissions on database
 
     - name: Install certbot
-      apt:
+      community.general.snap:
         name: certbot
         state: present
-      apt:
-        name: python3-certbot-nginx
-        state: present
+        classic: true
 
-    - name: Obtain SSL Certificates with Certbot
-      command: certbot --nginx --agree-tos --redirect --non-interactive --email jon@jon-polansky.com -d resume-dev.jon-polansky.com
+    - name: Run certbot
+      command: certbot --nginx
       register: certbot_output
       ignore_errors: yes
 
