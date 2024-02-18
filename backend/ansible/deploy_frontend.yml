@@ -78,7 +78,7 @@
         classic: true
 
     - name: Run certbot
-      command: certbot --nginx -d resume-dev.jon-polansky.com -n --agree-tos -q
+      command: certbot --nginx -d resume-dev.jon-polansky.com -n --agree-tos -q --email jon@jon-polansky.com
       register: certbot_output
       ignore_errors: yes
 
