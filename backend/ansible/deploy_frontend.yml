@@ -35,10 +35,7 @@
       apt:
         name: python3-pip
         state: present
-        register: apt_status
-        until: apt_status is success
-        delay: 5
-        retries: 10
+        lock_timeout: 180
 
     - name: Install Flask
       pip:
