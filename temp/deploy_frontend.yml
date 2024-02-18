@@ -69,30 +69,6 @@
         - Set permissions on mount point
         - Set permissions on database
 
-    - name: Install certbot
-      apt:
-        name: certbot
-        state: present
-      apt:
-        name: python-certbot-nginx
-        state: present
-
-    - name: Obtain SSL Certificates with Certbot
-      command: certbot --nginx --agree-tos --redirect --non-interactive --email jon@jon-polansky.com -d resume-dev.jon-polansky.com
-        register: certbot_output
-        ignore_errors: yes
-
-    - name: Show Certbot Output
-      debug:
-        var: certbot_output
-
-    - name: Add Certbot Renewal Cron Job
-      cron:
-        name: "Renew SSL Certificates with Certbot"
-        minute: "0"
-        hour: "*/12"
-        job: "certbot renew --quiet"
-
     - name: Run flaskapp service
       service:
         name: flaskapp
