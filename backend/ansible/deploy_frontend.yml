@@ -79,8 +79,8 @@
 
     - name: Obtain SSL Certificates with Certbot
       command: certbot --nginx --agree-tos --redirect --non-interactive --email jon@jon-polansky.com -d resume-dev.jon-polansky.com
-        register: certbot_output
-        ignore_errors: yes
+      register: certbot_output
+      ignore_errors: yes
 
     - name: Show Certbot Output
       debug:
