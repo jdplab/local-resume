@@ -36,7 +36,8 @@ def get_unique_visitors():
             cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
             uniquevisitors = cursor.fetchone()[0]
         else:
-            cursor.execute("UPDATE uniquevisitors SET visits = ? WHERE ip_address = ?", (visits + 1, ip_address,))
+            visits = visits + 1
+            cursor.execute("UPDATE uniquevisitors SET visits = ? WHERE ip_address = ?", (visits, ip_address,))
             cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
             uniquevisitors = cursor.fetchone()[0]
         connection.commit()
