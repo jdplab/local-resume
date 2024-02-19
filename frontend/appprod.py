@@ -29,7 +29,6 @@ def get_unique_visitors():
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
-        cursor.execute("CREATE TABLE IF NOT EXISTS uniquevisitors (id INTEGER PRIMARY KEY AUTOINCREMENT, ip_address TEXT, visits INTEGER)")
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits_row = cursor.fetchone()
         if visits_row is not None:
