@@ -49,7 +49,3 @@ variable "ssh_pw" {
 variable "disk_size" {
     default = 10
 }
-
-variable "ipconfig_settings" {
-    type = string
-}

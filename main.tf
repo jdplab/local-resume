@@ -53,5 +53,5 @@ resource "proxmox_vm_qemu" "web_server" {
     ]
   }
 
-  ipconfig0 = var.ipconfig_settings
+  ipconfig0 = "ip=${var.webserver_ip}/24,gw=192.168.69.1"
 }
