@@ -28,6 +28,13 @@
         owner: www-data
         group: www-data
 
+    - name: Set resume permissions
+      file:
+        path: /srv/frontend/templates/resources/JonathanPolanskyResume.docx
+        mode: "u+r"
+        owner: www-data
+        group: www-data
+
     #- name: Copy nginx.conf
     #  copy:
     #    src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
