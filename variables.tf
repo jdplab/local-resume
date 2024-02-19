@@ -7,7 +7,7 @@ variable "webtemplate_name" {
 }
 
 variable "webserver_name" {
-    default = "jp-resumeweb"
+    type = string
 }
 
 variable "webserver_ip" {
@@ -27,7 +27,7 @@ variable "proxmox_api_token_secret" {
 }
 
 variable "web_vmid" {
-    default = "602"
+    type = string
 }
 
 variable "storage_location" {
@@ -48,4 +48,8 @@ variable "ssh_pw" {
 
 variable "disk_size" {
     default = 10
+}
+
+variable "ipconfig_settings" {
+    type = string
 }

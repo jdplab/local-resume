@@ -49,9 +49,9 @@ resource "proxmox_vm_qemu" "web_server" {
 
   lifecycle {
     ignore_changes = [
-      network,ciuser,qemu_os,bootdisk,id,name,
+      network,ciuser,qemu_os,bootdisk
     ]
   }
 
-  ipconfig0 = "ip=192.168.69.62/24,gw=192.168.69.1"
+  ipconfig0 = var.ipconfig_settings
 }
