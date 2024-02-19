@@ -29,6 +29,7 @@ def get_unique_visitors():
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
+        cursor.execute("CREATE IF NOT EXISTS uniquevisitors (id INTEGER PRIMARY KEY AUTOINCREMENT, ip_address TEXT, visits INTEGER)")
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits_row = cursor.fetchone()
         if visits_row is not None:
@@ -80,15 +81,6 @@ def index():
 @app.route("/JonathanPolanskyResume.docx")
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
-
-@app.route("/debug")
-def debug():
-    ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
-    if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
-        ip_address = "home"
-        return ip_address
-    else:
-        return ip_address
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
