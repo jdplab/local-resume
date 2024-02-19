@@ -31,7 +31,7 @@ def get_unique_visitors():
             ip_address = "home"
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
-        if visits == None:
+        if visits is None:
             cursor.execute("INSERT INTO uniquevisitors VALUES (NULL, ?, 1)", (ip_address,))
             cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
             uniquevisitors = cursor.fetchone()[0]
