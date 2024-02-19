@@ -30,9 +30,9 @@ def get_unique_visitors():
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
-        visits = cursor.fetchone()
-        if visits is not None:
-            visits = visits + 1
+        visits_row = cursor.fetchone()
+        if visits_row is not None:
+            visits = visits_row[0] + 1
             cursor.execute("UPDATE uniquevisitors SET visits = ? WHERE ip_address = ?", (visits, ip_address,))
             cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
             uniquevisitors = cursor.fetchone()[0]
