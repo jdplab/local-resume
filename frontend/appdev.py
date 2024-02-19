@@ -77,7 +77,7 @@ def static_from_root():
 
 @app.route("/debug")
 def debug():
-    return request.headers
+    return str(request.headers)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
