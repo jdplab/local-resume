@@ -77,9 +77,7 @@ def static_from_root():
 
 @app.route("/debug")
 def debug():
-    ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
-    print("IP: " + ip_address)
-    print(request.headers)
+    return request.headers)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
