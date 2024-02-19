@@ -30,7 +30,7 @@
 
     - name: Set resume permissions
       file:
-        path: /srv/frontend/templates/resources/JonathanPolanskyResume.docx
+        path: /srv/frontend/static/JonathanPolanskyResume.docx
         mode: "u+r"
         owner: www-data
         group: www-data
