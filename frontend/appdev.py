@@ -27,7 +27,7 @@ def get_unique_visitors():
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS uniquevisitors(id int PRIMARY KEY, ip_address text, visits int)")
-        ip_address = request.headers.get("HTTP_X_REAL_IP")
+        ip_address = request.headers["HTTP_X_REAL_IP"]
         print(ip_address)
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
