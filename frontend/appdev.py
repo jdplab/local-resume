@@ -28,7 +28,8 @@ def get_unique_visitors():
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS uniquevisitors(id int PRIMARY KEY, ip_address text, visits int)")
         ip_address = str(request.headers.get("HTTP_X_REAL_IP"))
-        cursor.execute("SELECT visits FROM visitors WHERE ip_address = ?", (ip_address,))
+        print(ip_address)
+        cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
         if len(visits) == 0:
             cursor.execute("INSERT INTO uniquevisitors(ip_address, visits) VALUES (?, 1)", (ip_address,))
@@ -54,7 +55,7 @@ def get_visit_count():
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
         ip_address = str(request.headers.get("HTTP_X_REAL_IP"))
-        cursor.execute("SELECT visits FROM visitors WHERE ip_address = ?", (ip_address,))
+        cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
         connection.commit()
         return visits
