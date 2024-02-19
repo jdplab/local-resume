@@ -5,7 +5,7 @@
   become_method: sudo
 
   tasks:
-  
+
     - name: Upgrade packages
       apt:
         update_cache: true
@@ -13,6 +13,10 @@
       register: apt_action
       retries: 100
       until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+
+    - name: Update OS
+      apt:
+        upgrade: dist
   
     - name: Copy frontend files
       copy:
