@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, send_from_directory
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 
 def get_visitor_count():
     connection = None
@@ -26,10 +26,9 @@ def index():
     count = get_visitor_count()
     return render_template("index.html", visitor_count=count)
 
-@app.route("/resources/<path:filename>")
-def download_file(filename):
-    directory = os.path.join(app.root_path, 'resources')
-    return send_from_directory(directory, filename, as_attachment=True)
+@app.route("/JonathanPolanskyResume.docx")
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
