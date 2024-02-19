@@ -20,7 +20,7 @@
   
     - name: Copy frontend files
       copy:
-        src: /var/lib/jenkins/workspace/Resume/frontend/
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/frontend/
         dest: /srv/frontend/
         force: true
 
