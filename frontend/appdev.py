@@ -32,6 +32,8 @@ def get_unique_visitors():
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = cursor.fetchone()[0]
         if visits is not None:
+            print("Visits = None: " + str(visits is not None) + "Visits = " + str(visits))
+
             visits = visits + 1
             cursor.execute("UPDATE uniquevisitors SET visits = ? WHERE ip_address = ?", (visits, ip_address,))
             cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
@@ -60,7 +62,6 @@ def get_visit_count():
             ip_address = "home"
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = cursor.fetchone()[0]
-        print(visits)
         connection.commit()
         return visits
     except Exception as e:
