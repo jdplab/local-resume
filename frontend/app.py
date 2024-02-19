@@ -26,5 +26,10 @@ def index():
     count = get_visitor_count()
     return render_template("index.html", visitor_count=count)
 
+@app.route("/resources/<path:filename>")
+def download_file(filename):
+    directory = os.path.join(app.root_path, 'resources')
+    return send_from_directory(directory, filename, as_attachment=True)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
