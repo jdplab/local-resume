@@ -49,6 +49,7 @@ def get_unique_visitors():
 
 def get_visit_count():
     connection = None
+    visits = None
     try:
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
