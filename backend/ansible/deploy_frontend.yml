@@ -24,6 +24,13 @@
         dest: /srv/frontend/
         force: true
 
+    - name: Rename flask app (dev or prod)
+      copy:
+        src: /srv/frontend/{{ flaskapp }}
+        dest: /srv/frontend/app.py
+        remote_src: true
+        force: true
+
     - name: Set frontend folder permissions
       file:
         path: /srv/frontend
