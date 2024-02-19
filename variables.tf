@@ -23,7 +23,7 @@ variable "proxmox_api_token_id" {
 }
 
 variable "proxmox_api_token_secret" {
-    default = "a7b5c294-5bbf-4736-aa6a-ce0d23616307"
+    default = $PROXMOX_API_SECRET
 }
 
 variable "web_vmid" {
@@ -43,7 +43,7 @@ variable "ssh_user" {
 }
 
 variable "ssh_pw" {
-    default = "JP12345!"
+    default = $SSH_PASSWORD
 }
 
 variable "disk_size" {
