@@ -24,7 +24,7 @@ resource "proxmox_vm_qemu" "web_server" {
   cloudinit_cdrom_storage = var.storage_location
   agent = 1
   os_type = "cloud-init"
-  cores = 2
+  cores = var.cpu_cores
   sockets = 1
   cpu = "host"
   memory = 2048

@@ -49,3 +49,7 @@ variable "ssh_pw" {
 variable "disk_size" {
     default = 10
 }
+
+variable "cpu_cores" {
+    type = string
+}
