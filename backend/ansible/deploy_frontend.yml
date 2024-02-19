@@ -28,11 +28,11 @@
         owner: www-data
         group: www-data
 
-    - name: Copy nginx.conf
-      copy:
-        src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
-        dest: /etc/nginx
-        force: true
+    #- name: Copy nginx.conf
+    #  copy:
+    #    src: /var/lib/jenkins/workspace/Resume/backend/nginx.conf
+    #    dest: /etc/nginx
+    #    force: true
 
     - name: Copy flaskapp.service
       copy:
@@ -103,11 +103,11 @@
       command:
         cmd: systemctl daemon-reload
 
-    - name: Reload nginx
-      service:
-        name: nginx
-        state: reloaded
-        enabled: true
+    #- name: Reload nginx
+    #  service:
+    #    name: nginx
+    #    state: reloaded
+    #    enabled: true
 
   handlers:
     - name: Set permissions on mount point
