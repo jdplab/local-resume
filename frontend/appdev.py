@@ -26,8 +26,9 @@ def get_unique_visitors():
     try:
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS uniquevisitors(id int PRIMARY KEY, ip_address text, visits int)")
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
+            ip_address = "home"
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
         if len(visits) == 0:
@@ -53,7 +54,9 @@ def get_visit_count():
     try:
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
-        ip_address = str(request.headers.get("HTTP_X_REAL_IP"))
+        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
+            ip_address = "home"
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
         connection.commit()
