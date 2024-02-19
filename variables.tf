@@ -23,7 +23,7 @@ variable "proxmox_api_token_id" {
 }
 
 variable "proxmox_api_token_secret" {
-    default = env("PROXMOX_API_SECRET")
+    type = string
 }
 
 variable "web_vmid" {
@@ -43,7 +43,7 @@ variable "ssh_user" {
 }
 
 variable "ssh_pw" {
-    default = env("$SSH_PASSWORD")
+    type = string
 }
 
 variable "disk_size" {
