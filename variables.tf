@@ -11,7 +11,7 @@ variable "webserver_name" {
 }
 
 variable "webserver_ip" {
-    default = "192.168.69.62"
+    type = string
 }
 
 variable "proxmox_api_url" {
