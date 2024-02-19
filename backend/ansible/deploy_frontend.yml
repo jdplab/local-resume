@@ -104,7 +104,7 @@
 
     - name: Set permissions on database
       file:
-        path: /mnt/nfs/visitors.db
+        path: /mnt/nfs/{{ database_name }}.db
         owner: www-data
         group: www-data
         mode: "0770"
