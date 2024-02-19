@@ -27,6 +27,7 @@ def get_unique_visitors():
         connection = sqlite3.connect("/mnt/nfs/visitors.db")
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS uniquevisitors(id int PRIMARY KEY, ip_address text, visits int)")
+        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
         visits = int(cursor.fetchone()[0])
         if len(visits) == 0:
@@ -77,7 +78,12 @@ def static_from_root():
 
 @app.route("/debug")
 def debug():
-    return str(request.headers)
+    ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+    if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
+        ip_address = "home"
+        return ip_address
+    else:
+        return ip_address
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
