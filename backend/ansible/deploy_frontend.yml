@@ -103,6 +103,8 @@
         dest: /etc/redis/redis.conf
         remote_src: true
         force: true
+      notify:
+        - Redis - restart service
 
     - name: Rename redis.service (dev or prod)
       copy:
