@@ -6,7 +6,6 @@ Documentation=http://redis.io/documentation, man:redis-server(1)
 [Service]
 Type=forking
 ExecStart=/usr/bin/redis-server /etc/redis/redis.conf --dbfilename dump-dev.rdb --dir /mnt/nfs
-PIDFile=/run/redis/redis-server.pid
 TimeoutStopSec=0
 Restart=always
 User=redis
