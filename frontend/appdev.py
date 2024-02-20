@@ -1,85 +1,57 @@
-from flask import Flask, render_template, request, send_from_directory
-import sqlite3
+from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask_sse import sse
+from redis import Redis, ConnectionPool
+import os
 
 app = Flask(__name__, static_folder="static")
+app.register_blueprint(sse, url_prefix='/stream')
+
+redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+redis_pool = ConnectionPool.from_url(redis_url)
+redis_client = Redis(connection_pool=redis_pool)
+
+ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
+    ip_address = "home"
 
 def get_visitor_count():
-    connection = None
-    try:
-        connection = sqlite3.connect("/mnt/nfs/visitors.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT count FROM visitors")
-        count = cursor.fetchone()[0]
-        cursor.execute("UPDATE visitors SET count = count + 1")
-        connection.commit()
-        return count
-    except Exception as e:
-        print("Error:", e)
-        return count
-    finally:
-        if connection:
-            connection.close()
+    return int(redis_client.get('visitor_count') or 0)
 
-def get_unique_visitors():
-    connection = None
-    uniquevisitors = 0
-    try:
-        connection = sqlite3.connect("/mnt/nfs/visitors.db")
-        cursor = connection.cursor()
-        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
-        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
-            ip_address = "home"
-        cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
-        visits_row = cursor.fetchone()
-        if visits_row is not None:
-            visits = visits_row[0] + 1
-            cursor.execute("UPDATE uniquevisitors SET visits = ? WHERE ip_address = ?", (visits, ip_address,))
-            cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
-            uniquevisitors = cursor.fetchone()[0]
-        else:
-            print('Visits = None')
-            cursor.execute("INSERT INTO uniquevisitors VALUES (NULL, ?, 1)", (ip_address,))
-            cursor.execute("SELECT COUNT(*) FROM uniquevisitors")
-            uniquevisitors = cursor.fetchone()[0]
-        connection.commit()
-        return uniquevisitors
-    except Exception as e:
-        print("Error:", e)
-        return uniquevisitors
-    finally:
-        if connection:
-            connection.close()
+def get_user_visits(ip_address):
+    return int(redis_client.hget('user_visits', ip_address) or 0)
 
-def get_visit_count():
-    connection = None
-    visits = 0
-    try:
-        connection = sqlite3.connect("/mnt/nfs/visitors.db")
-        cursor = connection.cursor()
-        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
-        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
-            ip_address = "home"
-        cursor.execute("SELECT visits FROM uniquevisitors WHERE ip_address = ?", (ip_address,))
-        visits = cursor.fetchone()[0]
-        connection.commit()
-        return visits
-    except Exception as e:
-        print("Error:", e)
-        return visits
-    finally:
-        if connection:
-            connection.close()
+def get_unique_visitors_count():
+    return redis_client.hlen('user_visits')
 
 @app.route("/")
 def index():
     count = get_visitor_count()
-    uniquevisitors = get_unique_visitors()
-    visits = get_visit_count()
+    uniquevisitors = get_unique_visitors_count()
+    visits = get_user_visits(ip_address)
     return render_template("index.html", visitor_count=count, unique_visitors=uniquevisitors, user_visits=visits)
 
 @app.route("/JonathanPolanskyResume.docx")
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
+
+@app.route('/update-stats')
+def update_stats():
+    redis_client.incr('visitor_count')
+    redis_client.hincrby('user_visits', ip_address, 1)
+    stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count(), "user_visits": get_user_visits(ip_address)}
+    redis.publish('stats_channel', jsonify(stats))
+    return 'Stats updated and published to Redis'
+
+@sse.before_first_publish.connect
+def before_first_publish_handler(sender, **kwargs):
+    # Subscribe to Redis channel when the first client subscribes to the SSE stream
+    redis.subscribe('stats_channel')
+
+@sse.after_publish.connect
+def after_publish_handler(sender, message, **kwargs):
+    # Unsubscribe from Redis channel when there are no more clients subscribed to the SSE stream
+    if not sse.clients:
+        redis.unsubscribe('stats_channel')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

@@ -156,9 +156,10 @@
 
 		<div id="ft">
 			<p>Jonathan Polansky &mdash; <a href="mailto:jon@jon-polansky.com">jon@jon-polansky.com</a> &mdash; (631) - 662-6400</p>
-			<p>Total visits: <b>{{ visitor_count }}</b></p>
-			<p>Unique visitors: <b>{{ unique_visitors }}</b></p>
-			<p>You have visited this webpage <b>{{ user_visits }}</b> times.</p>
+			<p>The below values are dynamically updated.</p>
+			<p>Total visits: <b id="visitor_count">0</b></p>
+            <p>Unique visitors: <b id="unique_visitors">0</b></p>
+            <p>You have visited this webpage <b id="user_visits">0</b> times.</p>
 		</div><!--// footer -->
 
 	</div><!-- // inner -->
@@ -166,7 +167,7 @@
 
 </div><!--// doc -->
 
-
+<script src="stats.js"></script>
 </body>
 </html>
 

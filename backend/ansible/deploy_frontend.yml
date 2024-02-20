@@ -109,6 +109,11 @@
         - Redis - overcommit memory
         - Redis - enable overcommit memory
 
+    - name: Install flask-sse python module
+      pip:
+        name: flask-sse
+        state: present
+
     - name: Rename redis.conf (dev or prod)
       copy:
         src: /srv/frontend/{{ redis_conf }}.conf
