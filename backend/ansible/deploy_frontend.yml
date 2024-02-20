@@ -95,6 +95,7 @@
       notify:
         - Redis - configure kernel
         - Redis - overcommit memory
+        - Redis - enable overcommit memory
 
     - name: Run flaskapp service
       service:
@@ -129,3 +130,7 @@
     - name: Redis - overcommit memory
       shell:
         cmd: echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
+        
+    - name: Redis - enable overcommit memory
+      shell:
+        cmd: sysctl vm.overcommit_memory=1
