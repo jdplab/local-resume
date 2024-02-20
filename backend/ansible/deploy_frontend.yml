@@ -128,4 +128,4 @@
         
     - name: Redis - overcommit memory
       shell:
-        cmd: echo vm.overcommit_memory = 1 > /etc/sysctl.conf
+        cmd: echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
