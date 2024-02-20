@@ -97,23 +97,23 @@
         - Redis - overcommit memory
         - Redis - enable overcommit memory
 
-    - name: Rename redis.conf (dev or prod)
-      copy:
-        src: /srv/frontend/{{ redis_conf }}.conf
-        dest: /etc/redis/redis.conf
-        remote_src: true
-        force: true
-      notify:
-        - Redis - restart service
+    #- name: Rename redis.conf (dev or prod)
+    #  copy:
+    #    src: /srv/frontend/{{ redis_conf }}.conf
+    #    dest: /etc/redis/redis.conf
+    #    remote_src: true
+    #    force: true
+    #  notify:
+    #    - Redis - restart service
 
-    - name: Rename redis.service (dev or prod)
-      copy:
-        src: /srv/frontend/{{ redis_conf }}.service
-        dest: /etc/systemd/system/redis.service
-        remote_src: true
-        force: true
-      notify:
-        - Redis - restart service
+    #- name: Rename redis.service (dev or prod)
+    #  copy:
+    #    src: /srv/frontend/{{ redis_conf }}.service
+    #    dest: /etc/systemd/system/redis.service
+    #    remote_src: true
+    #    force: true
+    #  notify:
+    #    - Redis - restart service
 
     - name: Add redis user to www-data group
       user:
@@ -163,4 +163,3 @@
       service:
         name: redis
         state: restarted
-        enabled: true
