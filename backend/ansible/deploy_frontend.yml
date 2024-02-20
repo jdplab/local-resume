@@ -82,6 +82,16 @@
       notify:
         - Set permissions on mount point
         - Set permissions on database
+        
+    - name: Install redis
+      apt:
+        name: redis-server
+        state: present
+      pip:
+        name: redis
+        state: present
+      notify:
+        - Configure redis
 
     - name: Run flaskapp service
       service:
@@ -109,3 +119,8 @@
         group: www-data
         mode: "0770"
 
+    - name: Configure redis
+      shell:
+        cmd: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+      shell:
+        cmd: echo vm.overcommit_memory = 1 > /etc/sysctl.conf
