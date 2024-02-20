@@ -120,7 +120,7 @@
 
     - name: Copy redis.service
       copy:
-        src: /var/lib/jenkins/workspace/Resume/backend/redis.service
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/redis.service
         dest: /etc/systemd/system
         force: true
       notify:
