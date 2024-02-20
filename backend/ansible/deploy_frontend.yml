@@ -87,11 +87,14 @@
       apt:
         name: redis-server
         state: present
+      
+    - name: Install redis python module  
       pip:
         name: redis
         state: present
       notify:
-        - Configure redis
+        - Redis - configure kernel
+        - Redis - overcommit memory
 
     - name: Run flaskapp service
       service:
@@ -119,8 +122,10 @@
         group: www-data
         mode: "0770"
 
-    - name: Configure redis
+    - name: Redis - configure kernel
       shell:
         cmd: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+        
+    - name: Redis - overcommit memory
       shell:
         cmd: echo vm.overcommit_memory = 1 > /etc/sysctl.conf
