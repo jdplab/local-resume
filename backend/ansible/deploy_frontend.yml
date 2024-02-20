@@ -97,6 +97,28 @@
         - Redis - overcommit memory
         - Redis - enable overcommit memory
 
+    - name: Rename redis.conf (dev or prod)
+      copy:
+        src: /srv/frontend/{{ redis_conf }}.conf
+        dest: /etc/redis/redis.conf
+        remote_src: true
+        force: true
+
+    - name: Rename redis.service (dev or prod)
+      copy:
+        src: /srv/frontend/{{ redis_conf }}.service
+        dest: /etc/systemd/system/redis.service
+        remote_src: true
+        force: true
+      notify:
+        - Redis - restart service
+
+    - name: Add redis user to www-data group
+      user:
+        name: redis
+        groups: www-data
+        append: yes
+
     - name: Run flaskapp service
       service:
         name: flaskapp
@@ -134,3 +156,9 @@
     - name: Redis - enable overcommit memory
       shell:
         cmd: sysctl vm.overcommit_memory=1
+
+    - name: Redis - restart service
+      service:
+        name: redis
+        state: restarted
+        enabled: true

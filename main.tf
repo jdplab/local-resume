@@ -27,7 +27,7 @@ resource "proxmox_vm_qemu" "web_server" {
   cores = var.cpu_cores
   sockets = 1
   cpu = "host"
-  memory = 2048
+  memory = var.vm_memory
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
   boot = "order=scsi0;ide3"

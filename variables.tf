@@ -53,3 +53,7 @@ variable "disk_size" {
 variable "cpu_cores" {
     type = string
 }
+
+variable "vm_memory" {
+    type = string
+}
