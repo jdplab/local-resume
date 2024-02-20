@@ -52,6 +52,18 @@
         dest: /etc/systemd/system
         force: true
 
+    - name: Copy disable-transparent-huge-pages.service
+      copy:
+        src: /var/lib/jenkins/workspace/Resume/backend/disable-transparent-huge-pages.service
+        dest: /etc/systemd/system
+        force: true
+
+    - name: Enable disable-transparent-huge-pages.service
+      service:
+        name: disable-transparent-huge-pages
+        state: started
+        enabled: true
+
     - name: Install pip
       apt:
         name: python3-pip
@@ -97,23 +109,22 @@
         - Redis - overcommit memory
         - Redis - enable overcommit memory
 
-    #- name: Rename redis.conf (dev or prod)
-    #  copy:
-    #    src: /srv/frontend/{{ redis_conf }}.conf
-    #    dest: /etc/redis/redis.conf
-    #    remote_src: true
-    #    force: true
-    #  notify:
-    #    - Redis - restart service
+    - name: Rename redis.conf (dev or prod)
+      copy:
+        src: /srv/frontend/{{ redis_conf }}.conf
+        dest: /etc/redis/redis.conf
+        remote_src: true
+        force: true
+      notify:
+        - Redis - restart service
 
-    #- name: Rename redis.service (dev or prod)
-    #  copy:
-    #    src: /srv/frontend/{{ redis_conf }}.service
-    #    dest: /etc/systemd/system/redis.service
-    #    remote_src: true
-    #    force: true
-    #  notify:
-    #    - Redis - restart service
+    - name: Copy redis.service
+      copy:
+        src: /var/lib/jenkins/workspace/Resume/backend/redis.service
+        dest: /etc/systemd/system
+        force: true
+      notify:
+        - Redis - restart service
 
     - name: Add redis user to www-data group
       user:
@@ -138,14 +149,14 @@
         state: directory
         owner: www-data
         group: www-data
-        mode: "0770"
+        mode: "0777"
 
     - name: Set permissions on database
       file:
         path: /mnt/nfs/{{ database_name }}.db
         owner: www-data
         group: www-data
-        mode: "0770"
+        mode: "0777"
 
     - name: Redis - configure kernel
       shell:
