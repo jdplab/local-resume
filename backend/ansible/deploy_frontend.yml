@@ -48,13 +48,13 @@
 
     - name: Copy flaskapp.service
       copy:
-        src: /var/lib/jenkins/workspace/Resume/backend/flaskapp.service
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/flaskapp.service
         dest: /etc/systemd/system
         force: true
 
     - name: Copy disable-transparent-huge-pages.service
       copy:
-        src: /var/lib/jenkins/workspace/Resume/backend/disable-transparent-huge-pages.service
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/disable-transparent-huge-pages.service
         dest: /etc/systemd/system
         force: true
 
