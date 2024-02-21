@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask_sse import sse
 from redis import Redis, ConnectionPool
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__, static_folder="static")
 app.config['REDIS_URL'] = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
@@ -37,7 +40,9 @@ def static_from_root():
 
 @app.route('/update-stats')
 def update_stats():
-  
+
+    logging.debug('update_stats function called')
+
     ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
         ip_address = "home"
@@ -45,17 +50,23 @@ def update_stats():
     redis_client.incr('visitor_count')
     redis_client.hincrby('user_visits', ip_address, 1)
     stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count(), "user_visits": get_user_visits(ip_address)}
-    redis_client.publish('stats_channel', jsonify(stats))
+
+    logging.debug('stats updated and put into stats array')
+
+    stats_json = json.dumps(stats)
+
+    redis_client.publish('stats_channel', stats_json)
+
+    logging.debug('stats published to redis')
+
     return 'Stats updated and published to Redis'
 
 with app.app_context():
-    # Subscribe to Redis channel when the first client accesses the app
     pubsub = redis_client.pubsub()
     pubsub.subscribe('stats_channel')
 
 @app.teardown_appcontext
 def teardown(exception):
-    # Unsubscribe from Redis channel when the application context is torn down
     pubsub.unsubscribe('stats_channel')
 
 if __name__ == "__main__":
