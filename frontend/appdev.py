@@ -9,6 +9,7 @@ logging.debug('logging is working')
 app = Flask(__name__, static_folder="static")
 app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
+app.debug = True
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
 
