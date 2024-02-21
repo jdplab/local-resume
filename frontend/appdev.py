@@ -5,6 +5,7 @@ import os
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
+logging.debug('logging is working')
 
 app = Flask(__name__, static_folder="static")
 app.config['REDIS_URL'] = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
