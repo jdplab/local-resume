@@ -4,12 +4,10 @@ from redis import Redis, ConnectionPool
 import os
 
 app = Flask(__name__, static_folder="static")
-
-redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
-
+app.config['REDIS_URL'] = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 app.register_blueprint(sse, url_prefix='/stream')
 
-redis_pool = ConnectionPool.from_url(redis_url)
+redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
 
 def get_visitor_count():
