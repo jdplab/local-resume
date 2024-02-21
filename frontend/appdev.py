@@ -43,10 +43,13 @@ def static_from_root():
 @app.route('/stream')
 def stream():
     def event_stream():
+        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
+        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
+            ip_address = "home"
         initial_data = json.dumps({
             "visitor_count": get_visitor_count(),
             "unique_visitors": get_unique_visitors_count(),
-            "user_visits": get_user_visits(request.remote_addr)
+            "user_visits": get_user_visits(ip_address)
         })
         yield f'data: {initial_data}\n\n'
         pubsub = redis_client.pubsub()
