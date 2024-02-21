@@ -3,6 +3,7 @@ from flask_sse import sse
 from redis import Redis, ConnectionPool
 import os
 import logging
+import json
 
 logging.basicConfig(level=logging.DEBUG)
 logging.debug('logging is working')
