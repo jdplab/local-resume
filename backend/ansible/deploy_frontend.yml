@@ -79,6 +79,11 @@
         name: uwsgi
         state: present
 
+    - name: Install gevent
+      pip:
+        name: gevent
+        state: present
+
     - name: Install nfs-common package
       apt:
         name: nfs-common
