@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 logging.debug('logging is working')
 
 app = Flask(__name__, static_folder="static")
-app.config['REDIS_URL'] = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+app.config['REDIS_URL'] = "redis://localhost:6379/0"
 app.register_blueprint(sse, url_prefix='/stream')
 
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
@@ -62,6 +62,11 @@ def update_stats():
     logging.debug('stats published to redis')
 
     return 'Stats updated and published to Redis'
+
+@app.route('/stream')
+def stream():
+    logging.debug('Accessing /stream endpoint')  # Log statement to check if the /stream endpoint is accessed
+    return sse.stream()
 
 with app.app_context():
     pubsub = redis_client.pubsub()
