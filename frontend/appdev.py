@@ -48,16 +48,14 @@ def update_stats():
     redis.publish('stats_channel', jsonify(stats))
     return 'Stats updated and published to Redis'
 
-@app.before_first_request
-def before_first_publish_handler():
-    # Subscribe to Redis channel when the first client subscribes to the SSE stream
+with app.app_context():
+    # Subscribe to Redis channel when the first client accesses the app
     redis.subscribe('stats_channel')
 
 @app.teardown_appcontext
-def after_publish_handler(exception):
-    # Unsubscribe from Redis channel when there are no more clients subscribed to the SSE stream
-    if not sse.clients:
-        redis.unsubscribe('stats_channel')
+def teardown(exception):
+    # Unsubscribe from Redis channel when the application context is torn down
+    redis.unsubscribe('stats_channel')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
