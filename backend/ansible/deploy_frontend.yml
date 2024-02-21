@@ -123,8 +123,8 @@
 
     - name: Copy redis.service
       copy:
-        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/redis.service
-        dest: /etc/systemd/system
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/redis-server.service
+        dest: /lib/systemd/system
         force: true
 
     - name: Add redis user to www-data group
@@ -142,6 +142,10 @@
     - name: Reload systemctl daemon
       command:
         cmd: systemctl daemon-reload
+
+    - name: Restart redis service
+      command:
+        cmd: systemctl restart redis-server
 
   handlers:
     - name: Set permissions on mount point
