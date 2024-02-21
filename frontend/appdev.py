@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, send_from_directory, Response
 from redis import Redis, ConnectionPool
 import logging
 import json
+import signal
+import sys
 
 logging.basicConfig(level=logging.DEBUG)
 logging.debug('logging is working')
@@ -17,6 +19,17 @@ app.logger.addHandler(file_handler)
 
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
+
+active_pubsubs = []
+
+def signal_handler(sig, frame):
+    logging.debug('Signal handler called')
+    for pubsub in active_pubsubs:
+        pubsub.unsubscribe('stats_channel')
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 def get_visitor_count():
     return int(redis_client.get('visitor_count') or 0)
@@ -45,14 +58,18 @@ def index():
 
 @app.route("/JonathanPolanskyResume.docx")
 def static_from_root():
+    logging.debug("JonathanPolanskyResume.docx downloaded")
     return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route('/stream')
 def stream():
+    logging.debug('stream function called')
     ip_address = session.get("ip_address")
     def event_stream(ip_address):
         pubsub = redis_client.pubsub()
         pubsub.subscribe('stats_channel')
+        logging.debug('subscribed to stats_channel')
+        active_pubsubs.append(pubsub)
         try:
             initial_data = json.dumps({
                 "visitor_count": get_visitor_count(),
@@ -66,9 +83,11 @@ def stream():
                     if 'user_visits' in data:
                         data['user_visits'] = get_user_visits(ip_address)
                     yield f'data: {json.dumps(data)}\n\n'
-        except GeneratorExit:  # Client has disconnected
+        except GeneratorExit:
             pubsub.unsubscribe('stats_channel')
-            print('Client disconnected')
+            logging.debug('unsubscribed from stats_channel')
+            active_pubsubs.remove(pubsub)
+            logging.debug('removed pubsub from active_pubsubs')
     return Response(event_stream(ip_address), mimetype='text/event-stream')
 
 if __name__ == "__main__":
