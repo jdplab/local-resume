@@ -5,11 +5,16 @@ import json
 
 logging.basicConfig(level=logging.DEBUG)
 logging.debug('logging is working')
+file_handler = logging.FileHandler('flask.log')
+file_handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
-app.debug = True
+app.logger.addHandler(file_handler)
+
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
 
