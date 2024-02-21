@@ -51,20 +51,24 @@ def static_from_root():
 def stream():
     ip_address = session.get("ip_address")
     def event_stream(ip_address):
-        initial_data = json.dumps({
-            "visitor_count": get_visitor_count(),
-            "unique_visitors": get_unique_visitors_count(),
-            "user_visits": get_user_visits(ip_address)
-        })
-        yield f'data: {initial_data}\n\n'
         pubsub = redis_client.pubsub()
         pubsub.subscribe('stats_channel')
-        for message in pubsub.listen():
-            if message['type'] == 'message':
-                data = json.loads(message['data'].decode())
-                if 'user_visits' in data:
-                    data['user_visits'] = get_user_visits(ip_address)
-                yield f'data: {json.dumps(data)}\n\n'
+        try:
+            initial_data = json.dumps({
+                "visitor_count": get_visitor_count(),
+                "unique_visitors": get_unique_visitors_count(),
+                "user_visits": get_user_visits(ip_address)
+            })
+            yield f'data: {initial_data}\n\n'
+            for message in pubsub.listen():
+                if message['type'] == 'message':
+                    data = json.loads(message['data'].decode())
+                    if 'user_visits' in data:
+                        data['user_visits'] = get_user_visits(ip_address)
+                    yield f'data: {json.dumps(data)}\n\n'
+        except GeneratorExit:  # Client has disconnected
+            pubsub.unsubscribe('stats_channel')
+            print('Client disconnected')
     return Response(event_stream(ip_address), mimetype='text/event-stream')
 
 if __name__ == "__main__":
