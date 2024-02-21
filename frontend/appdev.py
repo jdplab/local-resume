@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.DEBUG)
 logging.debug('logging is working')
 
 app = Flask(__name__, static_folder="static")
+app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
@@ -26,7 +27,7 @@ def index():
     ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
         ip_address = "home"
-  
+    session["ip_address"] = ip_address
     redis_client.incr('visitor_count')
     redis_client.hincrby('user_visits', ip_address, 1)
     stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count(), "user_visits": get_user_visits(ip_address)}
@@ -43,9 +44,7 @@ def static_from_root():
 @app.route('/stream')
 def stream():
     def event_stream():
-        ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
-        if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
-            ip_address = "home"
+        ip_address = session.get("ip_address")
         initial_data = json.dumps({
             "visitor_count": get_visitor_count(),
             "unique_visitors": get_unique_visitors_count(),
