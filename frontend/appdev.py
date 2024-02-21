@@ -34,7 +34,7 @@ def index():
     stats_json = json.dumps(stats)
     redis_client.publish('stats_channel', stats_json)
     logging.debug('stats published to redis')
-    return 'Stats updated and published to Redis'
+    return render_template('index.html')
 
 @app.route("/JonathanPolanskyResume.docx")
 def static_from_root():
