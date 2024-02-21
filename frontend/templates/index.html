@@ -158,6 +158,7 @@
 			<p>Total visits: <b id="visitor_count">0</b></p>
             <p>Unique visitors: <b id="unique_visitors">0</b></p>
             <p>You have visited this webpage <b id="user_visits">0</b> times.</p>
+			<p id="error_message"></p>
 		</div><!--// footer -->
 
 		<script>
@@ -174,29 +175,17 @@
 		
 				source.onerror = function(event) {
 					console.error("Error occurred in stream:", event);
+					document.getElementById('error_message').innerText = 'Connection lost. Reconnecting...';
 					setTimeout(connectToStatsStream, 3000);
 				};
+		
+				window.addEventListener('beforeunload', function() {
+					source.close();
+				});
 			}
 		
-			function updateStats() {
-				fetch('/update-stats')
-					.then(response => {
-						if (!response.ok) {
-							throw new Error('Network response was not ok');
-						}
-						return response.text();
-					})
-					.then(data => {
-						console.log('Update successful:', data);
-					})
-					.catch(error => {
-						console.error('Error updating stats:', error);
-					});
-			}
-		
-			// Call the updateStats function when the page loads
+			// Call the connectToStatsStream function when the page loads
 			window.onload = function() {
-				updateStats();
 				connectToStatsStream();
 			};
 		</script>
