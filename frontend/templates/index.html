@@ -167,7 +167,7 @@
 		
 				source.onmessage = function(event) {
 					var data = JSON.parse(event.data);
-					// Update the values dynamically
+					
 					if (data.user_visits !== undefined) {
     					document.getElementById('user_visits').textContent = data.user_visits;
   					}
