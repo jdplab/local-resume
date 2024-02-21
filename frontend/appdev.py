@@ -50,12 +50,13 @@ def update_stats():
 
 with app.app_context():
     # Subscribe to Redis channel when the first client accesses the app
-    redis_client.subscribe('stats_channel')
+    pubsub = redis_client.pubsub()
+    pubsub.subscribe('stats_channel')
 
 @app.teardown_appcontext
 def teardown(exception):
     # Unsubscribe from Redis channel when the application context is torn down
-    redis_client.unsubscribe('stats_channel')
+    pubsub.unsubscribe('stats_channel')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
