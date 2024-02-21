@@ -43,8 +43,8 @@ def static_from_root():
 
 @app.route('/stream')
 def stream():
+    ip_address = session.get("ip_address")
     def event_stream():
-        ip_address = session.get("ip_address")
         initial_data = json.dumps({
             "visitor_count": get_visitor_count(),
             "unique_visitors": get_unique_visitors_count(),
