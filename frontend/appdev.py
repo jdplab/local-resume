@@ -45,17 +45,17 @@ def update_stats():
     redis_client.incr('visitor_count')
     redis_client.hincrby('user_visits', ip_address, 1)
     stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count(), "user_visits": get_user_visits(ip_address)}
-    redis.publish('stats_channel', jsonify(stats))
+    redis_client.publish('stats_channel', jsonify(stats))
     return 'Stats updated and published to Redis'
 
 with app.app_context():
     # Subscribe to Redis channel when the first client accesses the app
-    redis.subscribe('stats_channel')
+    redis_client.subscribe('stats_channel')
 
 @app.teardown_appcontext
 def teardown(exception):
     # Unsubscribe from Redis channel when the application context is torn down
-    redis.unsubscribe('stats_channel')
+    redis_client.unsubscribe('stats_channel')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
