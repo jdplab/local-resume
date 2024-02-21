@@ -43,6 +43,12 @@ def static_from_root():
 @app.route('/stream')
 def stream():
     def event_stream():
+        initial_data = json.dumps({
+            "visitor_count": get_visitor_count(),
+            "unique_visitors": get_unique_visitors_count(),
+            "user_visits": get_user_visits(request.remote_addr)
+        })
+        yield f'data: {initial_data}\n\n'
         pubsub = redis_client.pubsub()
         pubsub.subscribe('stats_channel')
         for message in pubsub.listen():
