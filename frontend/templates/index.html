@@ -152,8 +152,6 @@
 
 				</div><!--// .yui-b -->
 			</div><!--// yui-main -->
-		</div><!--// bd -->
-
 		<div id="ft">
 			<p>Jonathan Polansky &mdash; <a href="mailto:jon@jon-polansky.com">jon@jon-polansky.com</a> &mdash; (631) - 662-6400</p>
 			<p>The below values are dynamically updated.</p>
@@ -162,12 +160,33 @@
             <p>You have visited this webpage <b id="user_visits">0</b> times.</p>
 		</div><!--// footer -->
 
+		<script>
+			function connectToStatsStream() {
+				var source = new EventSource("/stream");
+				
+				source.onmessage = function(event) {
+					var data = JSON.parse(event.data);
+					// Update the values dynamically
+					document.getElementById("visitor_count").innerText = data.visitor_count;
+					document.getElementById("unique_visitors").innerText = data.unique_visitors;
+					document.getElementById("user_visits").innerText = data.user_visits;
+				};
+				
+				source.onerror = function(event) {
+					console.error("Error occurred in stream:", event);
+					setTimeout(connectToStatsStream, 3000);
+				};
+			}
+	
+			window.onload = connectToStatsStream;
+		</script>
+
 	</div><!-- // inner -->
 
 
 </div><!--// doc -->
 
-<script src="stats.js"></script>
+
 </body>
 </html>
 
