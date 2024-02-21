@@ -163,7 +163,7 @@
 		<script>
 			function connectToStatsStream() {
 				var source = new EventSource("/stream");
-				
+		
 				source.onmessage = function(event) {
 					var data = JSON.parse(event.data);
 					// Update the values dynamically
@@ -171,14 +171,34 @@
 					document.getElementById("unique_visitors").innerText = data.unique_visitors;
 					document.getElementById("user_visits").innerText = data.user_visits;
 				};
-				
+		
 				source.onerror = function(event) {
 					console.error("Error occurred in stream:", event);
 					setTimeout(connectToStatsStream, 3000);
 				};
 			}
-	
-			window.onload = connectToStatsStream;
+		
+			function updateStats() {
+				fetch('/update-stats')
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.text();
+					})
+					.then(data => {
+						console.log('Update successful:', data);
+					})
+					.catch(error => {
+						console.error('Error updating stats:', error);
+					});
+			}
+		
+			// Call the updateStats function when the page loads
+			window.onload = function() {
+				updateStats();
+				connectToStatsStream();
+			};
 		</script>
 
 	</div><!-- // inner -->
