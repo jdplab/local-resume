@@ -48,9 +48,14 @@ def stream():
         initial_data = json.dumps({
             "visitor_count": get_visitor_count(),
             "unique_visitors": get_unique_visitors_count(),
-            "user_visits": get_user_visits(ip_address)
         })
         yield f'data: {initial_data}\n\n'
+
+        user_visits_data = json.dumps({
+            "user_visits": get_user_visits(ip_address)
+        })
+        yield f'data: {user_visits_data}\n\n'
+
         pubsub = redis_client.pubsub()
         pubsub.subscribe('stats_channel')
         for message in pubsub.listen():
@@ -58,7 +63,7 @@ def stream():
                 data = message['data'].decode()
                 yield f'data: {data}\n\n'
 
-    return Response(event_stream(), mimetype='text/event-stream')
+    return Response(event_stream(ip_address), mimetype='text/event-stream')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", threaded=True)

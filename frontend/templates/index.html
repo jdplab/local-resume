@@ -168,9 +168,15 @@
 				source.onmessage = function(event) {
 					var data = JSON.parse(event.data);
 					// Update the values dynamically
-					document.getElementById("visitor_count").innerText = data.visitor_count;
-					document.getElementById("unique_visitors").innerText = data.unique_visitors;
-					document.getElementById("user_visits").innerText = data.user_visits;
+					if (data.user_visits !== undefined) {
+    					document.getElementById('user_visits').textContent = data.user_visits;
+  					}
+  					if (data.visitor_count !== undefined) {
+    					document.getElementById('visitor_count').textContent = data.visitor_count;
+  					}
+  					if (data.unique_visitors !== undefined) {
+    					document.getElementById('unique_visitors').textContent = data.unique_visitors;
+  					}
 				};
 		
 				source.onerror = function(event) {
