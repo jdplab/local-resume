@@ -120,16 +120,12 @@
         dest: /etc/redis/redis.conf
         remote_src: true
         force: true
-      notify:
-        - Redis - restart service
 
     - name: Copy redis.service
       copy:
         src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/redis.service
         dest: /etc/systemd/system
         force: true
-      notify:
-        - Redis - restart service
 
     - name: Add redis user to www-data group
       user:
@@ -174,8 +170,3 @@
     - name: Redis - enable overcommit memory
       shell:
         cmd: sysctl vm.overcommit_memory=1
-
-    - name: Redis - restart service
-      service:
-        name: redis
-        state: restarted
