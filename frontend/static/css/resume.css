@@ -65,6 +65,7 @@ a#pdf:hover { background: #222; }
 .talent { width: 32%; float: left }
 .talent h2 { margin-bottom: 6px; }
 .talent li { line-height: 24px; border-bottom: 1px solid #ccc; }
+.talent li:last-of-type { border-bottom: none; }
 
 #srt-ttab { margin-bottom: 100px; text-align: center;  }
 #srt-ttab img.last { margin-top: 20px }
