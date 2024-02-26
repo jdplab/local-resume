@@ -28,7 +28,7 @@ body { font-family: Georgia; color: #444; }
 
 /* //-- footer -- */
 #ft { padding: 1em 0 5em 0; font-size: 92%; border-top: 1px solid #ccc; text-align: center; }
-#ft p { margin-bottom: 0; text-align: center;   }
+#ft p { margin-bottom: 0; text-align: center; }
 
 /* //-- core typography and style -- */
 #hd h1 { font-size: 48px; text-transform: uppercase; letter-spacing: 3px; }
@@ -68,6 +68,9 @@ a#pdf:hover { background: #222; }
 
 #srt-ttab { margin-bottom: 100px; text-align: center;  }
 #srt-ttab img.last { margin-top: 20px }
+
+.visitor-counts:first-of-type { margin-top: 5px; }
+.visitor-counts:last-of-type { margin-top: 5px; }
 
 /* --// override to force 1/8th width grids -- */
 .yui-gf .yui-u{width:80.2%;}
