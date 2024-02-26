@@ -70,7 +70,7 @@ a#pdf:hover { background: #222; }
 #srt-ttab { margin-bottom: 100px; text-align: center;  }
 #srt-ttab img.last { margin-top: 20px }
 
-.contact-info { padding-top: 10px; padding-bottom: 10px; border-top: 1px solid #ccc; font-size: 92%; text-align: center; }
+.contact-info-bottom { padding-top: 10px; padding-bottom: 10px; border-top: 1px solid #ccc; font-size: 92%; text-align: center; }
 
 .visitor-counts p:first-of-type { margin-top: 20px; margin-bottom: 20px; }
 .visitor-counts p:last-of-type { margin-top: 10px; }
@@ -78,5 +78,3 @@ a#pdf:hover { background: #222; }
 /* --// override to force 1/8th width grids -- */
 .yui-gf .yui-u{width:80.2%;}
 .yui-gf div.first{width:12.3%;}
-
-
