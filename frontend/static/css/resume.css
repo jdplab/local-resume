@@ -56,7 +56,7 @@ a#pdf:hover { background: #222; }
 .job h4 { position: absolute; top: 0.35em; right: 0 }
 .job p { margin: 0.75em 0 3em 0; }
 .job li { list-style-type: disc; }
-.job li::marker { color: #ccc; }
+.job li::marker { color: #666; }
 
 .last { border: none; }
 .skills-list ul { margin: 0; }
@@ -69,7 +69,7 @@ a#pdf:hover { background: #222; }
 #srt-ttab { margin-bottom: 100px; text-align: center;  }
 #srt-ttab img.last { margin-top: 20px }
 
-.visitor-counts:first-of-type { margin-top: 5px; }
+.visitor-counts:first-of-type { margin-top: 20px; margin-bottom: 5px; }
 .visitor-counts:last-of-type { margin-top: 5px; }
 
 /* --// override to force 1/8th width grids -- */
