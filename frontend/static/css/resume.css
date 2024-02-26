@@ -72,8 +72,8 @@ a#pdf:hover { background: #222; }
 
 .contact-info-bottom { padding-top: 10px; padding-bottom: 10px; border-top: 1px solid #ccc; font-size: 92%; text-align: center; }
 
-.visitor-counts p:first-of-type { margin-top: 20px; margin-bottom: 20px; }
-.visitor-counts p:last-of-type { margin-top: 10px; }
+#vc-first { padding-top: 10px; padding-bottom: 10px; }
+#error_message { padding-top: 10px; }
 
 /* --// override to force 1/8th width grids -- */
 .yui-gf .yui-u{width:80.2%;}
