@@ -1,0 +1,15 @@
+- name: Install nfs
+  apt:
+    name: nfs-common
+    state: present
+
+- name: Mount NFS share
+  mount:
+    name: /mnt/nfs
+    src: "192.168.69.200:/volume1/resume-db"
+    fstype: nfs
+    opts: defaults
+    state: mounted
+  notify:
+    - Set permissions on mount point
+    - Set permissions on logs folder

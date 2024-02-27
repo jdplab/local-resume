@@ -1,0 +1,5 @@
+- name: Set timezone to America/New_York
+  community.general.timezone:
+    name: America/New_York
+  notify:
+    - Restart cron service

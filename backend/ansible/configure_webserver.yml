@@ -1,0 +1,30 @@
+- name: Configure webserver
+  hosts: webservers
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  roles:
+    - update
+    - timezone
+    - nfs_share
+    - copy_files
+    - install_applications
+    - configure_redis
+    - test_connection
+
+  handlers:
+    - name: Reload systemctl daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Reload redis-server service
+      systemd:
+        name: redis-server
+        state: restarted
+    
+    - name: Restart flaskapp service
+      systemd:
+        name: flaskapp
+        state: restarted
+        enabled: yes

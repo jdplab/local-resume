@@ -1,0 +1,19 @@
+- name: Install pip and redis
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-pip
+    - redis-server
+
+- name: Install flask, uwsgi, and gevent
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - flask
+    - uwsgi
+    - gevent
+    - flask-sse
+  notify:
+    - Restart flaskapp service

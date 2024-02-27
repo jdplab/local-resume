@@ -1,0 +1,15 @@
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Check website status
+  uri:
+    url: https://{{ website }}.jon-polansky.com
+    status_code: 200
+  register: result
+  ignore_errors: yes
+
+- name: Restart uWSGI
+  service:
+    name: flaskapp
+    state: restarted
+  when: result.failed
