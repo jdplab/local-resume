@@ -1,36 +1,18 @@
-from flask import Flask, render_template, request, send_from_directory, Response, session, jsonify
+from flask import Flask, render_template, request, send_from_directory, Response, session
 from redis import Redis, ConnectionPool
 from gevent import monkey
 import json
-import logging
-import signal
-import sys
+import atexit
 import time
 
 monkey.patch_all()
 
-logging.basicConfig(level=logging.WARNING)
-file_handler = logging.FileHandler('flask.log')
-file_handler.setLevel(logging.WARNING)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-
 app = Flask(__name__, static_folder="static")
 app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
-app.logger.addHandler(file_handler)
 
-# Initialize Redis connection pool and client
 pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=pool)
-
-def signal_handler(sig, frame):
-    logging.warning('Signal handler called')
-    redis_client.close()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
 
 def get_visitor_count():
     return int(redis_client.get('visitor_count') or 0)
@@ -65,12 +47,16 @@ def stream():
                     "unique_visitors": get_unique_visitors_count()
                 }
                 yield f'data: {json.dumps(data)}\n\n'
-                time.sleep(1)  # delay for 1 second
+                time.sleep(1) 
             except GeneratorExit:
-                logging.warning('GeneratorExit caught')
                 break
     
     return Response(event_stream(ip_address), mimetype='text/event-stream')
+
+def cleanup():
+    redis_client.close()
+
+atexit.register(cleanup)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", threaded=True)
