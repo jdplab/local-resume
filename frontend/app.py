@@ -10,16 +10,6 @@ monkey.patch_all()
 
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-test_number = 0
-try:
-    test_number =+ 1
-    def logging_test(test_number):
-        logging.error(f"Logging test {test_number}")
-    logging_test(test_number)
-except Exception as e:
-    logging.error(f"Error in logging test {test_number}: {e}")
-    raise
-
 app = Flask(__name__, static_folder="static")
 app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
@@ -36,6 +26,12 @@ def get_unique_visitors_count():
 @app.route("/")
 def index():
     try:
+        test_number = 0
+        test_number =+ 1
+        def logging_test(test_number):
+            logging.error(f"Logging test {test_number}")
+        logging_test(test_number)
+        
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
