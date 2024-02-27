@@ -1,7 +1,7 @@
 - name: Copy frontend files
   copy:
     src: frontend
-    dest: /srv/frontend
+    dest: /srv/
     force: true
   notify:
     - Set frontend folder permissions
