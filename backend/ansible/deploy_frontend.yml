@@ -101,7 +101,7 @@
 
     - name: Copy logrotate configuration
       copy:
-        src: /etc/frontend/uwsgi-logrotate-{{ logs_path }}
+        src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/uwsgi-logrotate-{{ logs_path }}
         dest: /etc/logrotate.d/
         force: true
         
