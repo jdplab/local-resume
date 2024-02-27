@@ -16,17 +16,17 @@
     msg: "The website is down. Restarting uWSGI."
   when: result.failed
 
-- name: Website failed
-  include_tasks: retry_tasks.yml
-  until: result is defined and result.status == 200
-  retries: 3
-  delay: 5
+- name: Restart uWSGI
+  service:
+    name: flaskapp
+    state: restarted
+  register: result
   when: result.failed
 
 - debug:
-    msg: "Failed to bring the website up. Server rebooting."
-  when: retry_count == 3
+    msg: "The restart did not bring the website back up. Rebooting the server."
+  when: result.failed
 
-- name: Reboot server
+- name: Reboot the server
   command: reboot
-  when: retry_count == 3 and result is undefined or result.status != 200
+  when: result.failed
