@@ -9,7 +9,7 @@
     dateext
     dateformat -%Y-%m-%d
     postrotate
-        mv /tmp/flask.log-$(date +%Y-%m-%d -d "yesterday") /mnt/nfs/prod;
+        mv /tmp/flask.log-$(date +%Y-%m-%d -d "yesterday")* /mnt/nfs/prod;
         find /mnt/nfs/prod/flask.log-* -mtime +30 -exec rm {} \;
     endscript
 }
