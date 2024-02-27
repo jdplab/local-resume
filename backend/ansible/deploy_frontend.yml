@@ -17,6 +17,12 @@
     - name: Update OS
       apt:
         upgrade: dist
+
+    - name: Set timezone to America/New_York
+      community.general.timezone:
+        name: America/New_York
+      notify:
+        - Restart cron service
   
     - name: Copy frontend files
       copy:
@@ -91,7 +97,13 @@
         state: mounted
       notify:
         - Set permissions on mount point
-        - Set permissions on database
+        - Set permissions on logs folder
+
+    - name: Copy logrotate configuration
+      copy:
+        src: /etc/frontend/uwsgi-logrotate-{{ logs_path }}
+        dest: /etc/logrotate.d/
+        force: true
         
     - name: Install redis
       apt:
@@ -131,12 +143,6 @@
         groups: www-data
         append: yes
 
-    - name: Run flaskapp service
-      service:
-        name: flaskapp
-        state: restarted
-        enabled: true
-
     - name: Reload systemctl daemon
       command:
         cmd: systemctl daemon-reload
@@ -144,8 +150,22 @@
     - name: Restart redis service
       command:
         cmd: systemctl restart redis-server
+      notify:
+        - Restart flaskapp service
 
   handlers:
+
+    - name: Restart cron service
+      service:
+        name: cron
+        state: restarted
+
+    - name: Restart flaskapp service
+      service:
+        name: flaskapp
+        state: restarted
+        enabled: true
+
     - name: Set permissions on mount point
       file:
         path: /mnt/nfs
@@ -154,9 +174,10 @@
         group: www-data
         mode: "0777"
 
-    - name: Set permissions on database
+    - name: Set permissions on logs folder
       file:
-        path: /mnt/nfs/{{ database_name }}.db
+        path: /mnt/nfs/{{ logs_path }}
+        state: directory
         owner: www-data
         group: www-data
         mode: "0777"

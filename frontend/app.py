@@ -26,12 +26,6 @@ def get_unique_visitors_count():
 @app.route("/")
 def index():
     try:
-        test_number = 0
-        test_number =+ 1
-        def logging_test(test_number):
-            logging.error(f"Logging test {test_number}")
-        logging_test(test_number)
-        
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
@@ -56,7 +50,6 @@ def static_from_root():
 def stream():
     try:
         ip_address = session.get("ip_address")
-        
         def event_stream(ip_address):
             while True:
                 try:
