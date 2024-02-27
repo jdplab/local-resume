@@ -198,30 +198,38 @@
 
 		<script>
 			function connectToStatsStream() {
-				var source = new EventSource("/stream");
+				if (!window.EventSource) {
+					// EventSource is not available in this browser
+					console.error("EventSource is not available in this browser.");
+					return;
+				}
+		
+				const source = new EventSource("/stream");
+				const visitorCountElement = document.getElementById('visitor_count');
+				const uniqueVisitorsElement = document.getElementById('unique_visitors');
+				const errorMessageElement = document.getElementById('error_message');
 		
 				source.onmessage = function(event) {
-					var data = JSON.parse(event.data);
-					
-  					}
-  					if (data.visitor_count !== undefined) {
-    					document.getElementById('visitor_count').textContent = data.visitor_count;
-  					}
-  					if (data.unique_visitors !== undefined) {
-    					document.getElementById('unique_visitors').textContent = data.unique_visitors;
-  					}
+					const data = JSON.parse(event.data);
+		
+					if (data.visitor_count !== undefined) {
+						visitorCountElement.textContent = data.visitor_count;
+					}
+					if (data.unique_visitors !== undefined) {
+						uniqueVisitorsElement.textContent = data.unique_visitors;
+					}
 				};
 		
 				source.onerror = function(event) {
 					console.error("Error occurred in stream:", event);
-					document.getElementById('error_message').innerText = 'Connection lost. Reconnecting...';
+					errorMessageElement.innerText = 'Connection lost. Reconnecting...';
 					setTimeout(connectToStatsStream, 3000);
 				};
 		
 				window.addEventListener('beforeunload', function() {
 					source.close();
 				});
-			
+			}
 		
 			// Call the connectToStatsStream function when the page loads
 			window.onload = function() {
