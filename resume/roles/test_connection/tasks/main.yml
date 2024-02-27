@@ -6,7 +6,6 @@
     url: https://{{ website }}fd.jon-polansky.com
     status_code: 200
   register: result
-  failed_when: false
 
 - debug:
     msg: "The website is up and running."
