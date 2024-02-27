@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory, Response, session, jsonify
 from redis import Redis, ConnectionPool
 from gevent import monkey
+import json
 import logging
 import signal
 import sys
@@ -63,7 +64,7 @@ def stream():
                     "visitor_count": get_visitor_count(),
                     "unique_visitors": get_unique_visitors_count()
                 }
-                yield f'data: {jsonify(data)}\n\n'
+                yield f'data: {json.dumps(data)}\n\n'
                 time.sleep(1)  # delay for 1 second
             except GeneratorExit:
                 logging.warning('GeneratorExit caught')
