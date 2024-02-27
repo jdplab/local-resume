@@ -1,0 +1,25 @@
+- name: Restart uWSGI
+  service:
+    name: flaskapp
+    state: restarted
+
+- name: Check website status
+  uri:
+    url: https://{{ website }}fd.jon-polansky.com
+    status_code: 200
+  register: result
+
+- set_fact:
+  retry_count: "{{ 0 if retry_count is undefined else retry_count | int + 1 }}"
+
+- debug:
+  msg: "The website is up and running. It took {{ retry_count }} restarts to bring it up."
+  when: result.status == 200
+
+- debug:
+  msg: "Website failed to come up after restarting service. Trying again in 5 seconds. Remaining attempts: {{ 3 - retry_count }}"
+  when: result.status != 200
+
+- pause:
+  seconds: 5
+  when: result.status != 200
