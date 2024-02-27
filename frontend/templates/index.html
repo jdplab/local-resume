@@ -192,7 +192,6 @@
 				<p id="vc-first">The below values are dynamically updated. Note that unique visitors and your visits are determined by public IP.</p>
 				<p>Total visits: <b id="visitor_count">0</b></p>
            		<p>Unique visitors: <b id="unique_visitors">0</b></p>
-           		<p>You have visited this webpage <b id="user_visits">0</b> times.</p>
 				<p id="error_message"></p>
 			</div>
 		</div><!--// footer -->
@@ -204,8 +203,6 @@
 				source.onmessage = function(event) {
 					var data = JSON.parse(event.data);
 					
-					if (data.user_visits !== undefined) {
-    					document.getElementById('user_visits').textContent = data.user_visits;
   					}
   					if (data.visitor_count !== undefined) {
     					document.getElementById('visitor_count').textContent = data.visitor_count;
