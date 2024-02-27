@@ -10,7 +10,7 @@
 
 - name: Rename redis.conf (dev or prod)
   copy:
-    src: {{ redis_conf }}.conf
+    src: "{{ redis_conf }}".conf
     dest: /etc/redis/redis.conf
     force: true
   notify:
