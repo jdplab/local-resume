@@ -10,8 +10,8 @@
 
 - name: Redis - configure kernel
   copy:
-    src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/enabled
-    dest: /sys/kernel/mm/transparent_hugepage
+    src: enabled
+    dest: /sys/kernel/mm/transparent_hugepage/enabled
     force: true
   notify:
     - Reload redis-server service
@@ -19,8 +19,8 @@
 
 - name: Redis - overcommit memory
   copy:
-    src: /var/lib/jenkins/workspace/{{ workspace_path }}/backend/sysctl.conf
-    dest: /etc
+    src: sysctl.conf
+    dest: /etc/sysctl.conf
     force: true
   notify:
     - Reload redis-server service

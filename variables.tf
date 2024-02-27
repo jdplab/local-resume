@@ -15,11 +15,11 @@ variable "webserver_ip" {
 }
 
 variable "proxmox_api_url" {
-    default = "https://192.168.69.251:8006/api2/json"
+    type = string
 }
 
 variable "proxmox_api_token_id" {
-    default = "terraform-prov@pve!terraformToken"
+    type = string
 }
 
 variable "proxmox_api_token_secret" {
