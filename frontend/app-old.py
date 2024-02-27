@@ -17,18 +17,8 @@ app.secret_key = "secret_key"
 app.config['REDIS_URL'] = "redis://localhost:6379/0"
 app.logger.addHandler(file_handler)
 
-# Initialize Redis connection pool
 redis_pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=redis_pool)
-
-# Initialize Redis pub/sub connection
-pubsub = redis_client.pubsub()
-pubsub.subscribe('stats_channel')
-
-@app.teardown_request
-def close_pubsub(exception=None):
-    logging.debug('Closing pubsub')
-    pubsub.close()
 
 active_pubsubs = []
 
@@ -36,7 +26,6 @@ def signal_handler(sig, frame):
     logging.debug('Signal handler called')
     for pubsub in active_pubsubs:
         pubsub.unsubscribe('stats_channel')
-    redis_client.close()
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -76,8 +65,11 @@ def static_from_root():
 def stream():
     logging.debug('stream function called')
     ip_address = session.get("ip_address")
-    
     def event_stream(ip_address):
+        pubsub = redis_client.pubsub()
+        pubsub.subscribe('stats_channel')
+        logging.debug('subscribed to stats_channel')
+        active_pubsubs.append(pubsub)
         try:
             initial_data = json.dumps({
                 "visitor_count": get_visitor_count(),
@@ -92,8 +84,10 @@ def stream():
                         data['user_visits'] = get_user_visits(ip_address)
                     yield f'data: {json.dumps(data)}\n\n'
         except GeneratorExit:
-            logging.debug('GeneratorExit caught')
-    
+            pubsub.unsubscribe('stats_channel')
+            logging.debug('unsubscribed from stats_channel')
+            active_pubsubs.remove(pubsub)
+            logging.debug('removed pubsub from active_pubsubs')
     return Response(event_stream(ip_address), mimetype='text/event-stream')
 
 if __name__ == "__main__":
