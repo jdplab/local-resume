@@ -37,7 +37,7 @@
   command: reboot
   when: result.failed
 
-  - debug:
+- debug:
     msg: "The restart did not bring the website back up. Rebooting the server."
   when: result.failed
 
