@@ -3,7 +3,7 @@
 
 - name: Check website status
   uri:
-    url: https://{{ website }}fd.jon-polansky.com
+    url: https://{{ website }}j.jon-polansky.com
     status_code: 200
   register: result
   ignore_errors: yes
@@ -24,7 +24,7 @@
 
 - name: Check website status
   uri:
-    url: https://{{ website }}fd.jon-polansky.com
+    url: https://{{ website }}j.jon-polansky.com
     status_code: 200
   register: result
   ignore_errors: yes
@@ -35,4 +35,37 @@
 
 - name: Reboot the server
   command: reboot
+  when: result.failed
+
+  - debug:
+    msg: "The restart did not bring the website back up. Rebooting the server."
+  when: result.failed
+
+- name: Reboot the server
+  command: reboot
+  when: result.failed
+
+- name: Wait for server to restart
+  wait_for:
+    host: webservers
+    port: 22
+    delay: 60
+    timeout: 300
+  delegate_to: localhost
+  when: result.failed
+
+- name: Check website status after reboot
+  uri:
+    url: https://{{ website }}.jon-polansky.com
+    status_code: 200
+  register: result
+  when: result.failed
+  ignore_errors: yes
+
+- debug:
+    msg: "The website is up and running."
+  when: result == 200
+
+- debug:
+    msg: "The website is still down. Manual intervention required."
   when: result.failed
