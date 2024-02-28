@@ -6,6 +6,7 @@
     url: https://{{ website }}fd.jon-polansky.com
     status_code: 200
   register: result
+  ignore_errors: yes
 
 - debug:
     msg: "The website is up and running."
@@ -26,7 +27,7 @@
     url: https://{{ website }}fd.jon-polansky.com
     status_code: 200
   register: result
-  failed_when: false
+  ignore_errors: yes
 
 - debug:
     msg: "The restart did not bring the website back up. Rebooting the server."
