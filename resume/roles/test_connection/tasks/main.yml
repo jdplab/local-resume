@@ -53,6 +53,7 @@
     timeout: 300
   delegate_to: localhost
   when: result.failed
+  ignore_errors: yes
 
 - name: Check website status after reboot
   uri:
@@ -61,10 +62,6 @@
   register: result
   when: result.failed
   ignore_errors: yes
-
-- debug:
-    msg: "The website is up and running."
-  when: result == 200
 
 - debug:
     msg: "The website is still down. Manual intervention required."
