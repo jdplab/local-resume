@@ -1,0 +1,15 @@
+- name: Set permissions on mount point
+  file:
+    path: /mnt/nfs
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0777"
+
+- name: Set permissions on logs folder
+  file:
+    path: /mnt/nfs/{{ logs_path }}
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0777"

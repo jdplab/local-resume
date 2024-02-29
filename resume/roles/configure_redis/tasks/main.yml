@@ -1,0 +1,26 @@
+- name: Install redis
+  apt:
+    name: redis-server
+    state: present
+  notify:
+    - Add redis user to www-data group
+    - Redis - configure kernel
+    - Redis - overcommit memory
+    - Redis - enable overcommit memory
+
+- name: Rename redis.conf (dev or prod)
+  copy:
+    src: "{{ redis_conf }}.conf"
+    dest: /etc/redis/redis.conf
+    force: true
+  notify:
+    - Reload redis-server service
+  
+- name: Copy redis.service
+  copy:
+    src: redis-server.service
+    dest: /lib/systemd/system/redis-server.service
+    force: true
+  notify:
+    - Reload systemctl daemon
+    - Reload redis-server service

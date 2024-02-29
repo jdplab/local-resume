@@ -1,0 +1,31 @@
+- name: Add redis user to www-data group
+  user:
+    name: redis
+    groups: www-data
+    append: yes
+  notify:
+    - Reload systemctl daemon
+    - Reload redis-server service
+    - Restart flaskapp service
+
+- name: Redis - configure kernel
+  copy:
+    src: enabled
+    dest: /sys/kernel/mm/transparent_hugepage/enabled
+    force: true
+  notify:
+    - Reload redis-server service
+    - Restart flaskapp service
+
+- name: Redis - overcommit memory
+  copy:
+    src: sysctl.conf
+    dest: /etc/sysctl.conf
+    force: true
+  notify:
+    - Reload redis-server service
+    - Restart flaskapp service
+
+- name: Redis - enable overcommit memory
+  shell:
+    cmd: sysctl vm.overcommit_memory=1

@@ -1,0 +1,101 @@
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Check website status
+  uri:
+    url: https://{{ website }}.jon-polansky.com
+    status_code: 200
+  register: result
+  ignore_errors: true
+
+- debug:
+    msg: "The website is up and running."
+  when: result.status == 200
+
+- name: Website recovery
+  block:
+
+    - debug:
+        msg: "The website is down. Restarting uWSGI."
+
+    - name: Restart redis
+      systemd:
+        name: redis-server
+        state: restarted
+
+    - name: Restart uWSGI
+      systemd:
+        name: flaskapp
+        state: restarted
+
+    - name: Check website status
+      uri:
+        url: https://{{ website }}.jon-polansky.com
+        status_code: 200
+      register: second_result
+      ignore_errors: true
+
+    - debug:
+        msg: "The uWSGI service restart brought the website back up. No action is required."
+      when: second_result.status == 200
+
+    - block:
+
+        - debug:
+            msg: "The uWSGI service restart did not bring the website back up. Rebooting the server."
+        
+        - name: Reboot the server
+          reboot:
+            reboot_timeout: 600
+            test_command: whoami
+
+        - name: Wait an additional 30 seconds to allow services to start
+          wait_for:
+            timeout: 30
+
+        - name: Restart redis
+          systemd:
+            name: redis-server
+            state: restarted
+
+        - name: Restart uWSGI
+          systemd:
+            name: flaskapp
+            state: restarted
+
+        - name: Check website status
+          uri:
+            url: https://{{ website }}.jon-polansky.com
+            status_code: 200
+          register: third_result
+          ignore_errors: true
+
+        - debug:
+            msg: "The website is back up after the reboot. No action is required."
+          when: third_result.status == 200
+
+        - block:
+
+            - debug:
+                msg: "The website is still down after rebooting. Manual intervention is required."
+
+            - name: Send email on failure
+              mail:
+                host: smtp.gmail.com
+                port: 587
+                username: jp.lab.ny@gmail.com
+                password: hyiazgfailyhptec
+                to: jon@jon-polansky.com
+                subject: URGENT - {{ website }}.jon.polansky.com is down
+                body: The website is still down after rebooting. Manual intervention is required.
+              delegate_to: localhost
+
+            - name: failure
+              fail:
+                msg: "The website is still down after rebooting. Manual intervention is required."
+
+          when: third_result.status != 200
+
+      when: second_result.status != 200
+
+  when: result.status != 200
