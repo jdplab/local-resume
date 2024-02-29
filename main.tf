@@ -46,12 +46,10 @@ resource "proxmox_vm_qemu" "web_server" {
     model = "virtio"
     bridge = "vmbr0"
   }
-
   lifecycle {
     ignore_changes = [
       network,ciuser,qemu_os,bootdisk
     ]
   }
-
   ipconfig0 = "ip=${var.webserver_ip}/24,gw=192.168.69.1"
 }
