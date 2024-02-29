@@ -28,3 +28,4 @@ The primary goal of this project is to demonstrate:
 
 * This project is meant for demonstration purposes and is not suitable for production use without further customization and hardening.
 * Not included in this repo is the Jenkins pipeline that ties everything together. This passes important variables and executes the build steps.
+* I did not create the original HTML/CSS, though I did modify them to fit my needs.
