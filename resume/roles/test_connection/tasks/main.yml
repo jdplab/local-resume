@@ -83,9 +83,9 @@
               mail:
                 host: smtp.gmail.com
                 port: 587
-                username: jp.lab.ny@gmail.com
-                password: hyiazgfailyhptec
-                to: jon@jon-polansky.com
+                username: "{{ gmail_username }}"
+                password: "{{ gmail_password }}"
+                to: "{{ notify_email }}"
                 subject: URGENT - {{ website }}.jon.polansky.com is down
                 body: The website is still down after rebooting. Manual intervention is required.
               delegate_to: localhost
