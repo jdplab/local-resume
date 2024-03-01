@@ -3,7 +3,7 @@
 
 - name: Check website status
   uri:
-    url: https://{{ website }}test.jon-polansky.com
+    url: https://{{ website }}.jon-polansky.com
     status_code: 200
   register: result
   ignore_errors: true
@@ -30,7 +30,7 @@
 
     - name: Check website status
       uri:
-        url: https://{{ website }}test.jon-polansky.com
+        url: https://{{ website }}.jon-polansky.com
         status_code: 200
       register: second_result
       ignore_errors: true
@@ -65,7 +65,7 @@
 
         - name: Check website status
           uri:
-            url: https://{{ website }}test.jon-polansky.com
+            url: https://{{ website }}.jon-polansky.com
             status_code: 200
           register: third_result
           ignore_errors: true
