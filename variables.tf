@@ -1,5 +1,5 @@
 variable "proxmox_host" {
-    default = "jp-proxmox"
+    default = "pve"
 }
 
 variable "webtemplate_name" {
@@ -31,7 +31,7 @@ variable "web_vmid" {
 }
 
 variable "storage_location" {
-    default = "local-lvm"
+    default = "VM-Data"
 }
 
 variable "ssh_port" {
