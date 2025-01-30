@@ -6,7 +6,7 @@
 - name: Mount NFS share
   mount:
     name: /mnt/nfs
-    src: "192.168.69.200:/volume1/resume-db"
+    src: "192.168.69.240:/mnt/Data/resume-db"
     fstype: nfs
     opts: defaults
     state: mounted
