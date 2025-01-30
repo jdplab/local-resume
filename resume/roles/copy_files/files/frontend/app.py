@@ -13,8 +13,8 @@ monkey.patch_all()
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__, static_folder="static")
-app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")
-app.config['REDIS_URL'] = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+app.secret_key = os.getenv("SECRET_KEY")
+app.config['REDIS_URL'] = os.getenv("REDIS_URL")
 
 pool = ConnectionPool.from_url(app.config['REDIS_URL'])
 redis_client = Redis(connection_pool=pool)
