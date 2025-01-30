@@ -1,14 +1,15 @@
-from flask import Flask, render_template, request, send_from_directory, Response, session
+from flask import Flask, render_template, request, send_from_directory, Response, session, make_response
 from redis import Redis, ConnectionPool
 from gevent import monkey
 import json
 import atexit
 import time
 import logging
+import uuid
 
 monkey.patch_all()
 
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(name)s - %(levellevel)s - %(message)s')
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = "secret_key"
@@ -29,11 +30,19 @@ def index():
         ip_address = request.headers.get("X-Forwarded-For", request.remote_addr)
         if ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address.startswith("192."):
             ip_address = "home"
+        
+        visitor_id = request.cookies.get('visitor_id')
+        if not visitor_id:
+            visitor_id = str(uuid.uuid4())
+            redis_client.incr('visitor_count')
+        
         session["ip_address"] = ip_address
-        redis_client.incr('visitor_count')
-        redis_client.hincrby('user_visits', ip_address, 1)
+        redis_client.hincrby('user_visits', visitor_id, 1)
         stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count()}
-        return render_template('index.html', stats=stats)
+        
+        response = make_response(render_template('index.html', stats=stats))
+        response.set_cookie('visitor_id', visitor_id, max_age=60*60*24*30)
+        return response
     except Exception as e:
         logging.error(f"Error in index route: {e}")
         raise
