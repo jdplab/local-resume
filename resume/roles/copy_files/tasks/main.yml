@@ -6,6 +6,7 @@
   notify:
     - Set frontend folder permissions
     - Set resume permissions
+    - Restart flaskapp service
 
 - name: Copy flaskapp.service
   copy:
