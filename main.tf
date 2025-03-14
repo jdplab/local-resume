@@ -44,7 +44,7 @@ resource "proxmox_vm_qemu" "web_server" {
   }
   network {
     model = "virtio"
-    bridge = "vmbr0"
+    bridge = "vmbr_srvr"
   }
   lifecycle {
     ignore_changes = [
