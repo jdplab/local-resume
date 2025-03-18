@@ -1,7 +1,7 @@
 - name: Set environmental variables
   shell: "echo $REDIS_URL"
   environment:
-    REDIS_URL: {{ redis_url }}
+    REDIS_URL: "{{ redis_url }}"
 
 - name: Install pip and redis
   apt:
