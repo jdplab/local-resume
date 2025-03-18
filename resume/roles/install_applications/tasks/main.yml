@@ -1,11 +1,7 @@
 - name: Set environmental variables
-  lineinfile:
-    path: /etc/environment
-    line: "{{ item }}"
-    create: yes
-  with_items:
-    - "SECRET_KEY={{ secret_key }}"
-    - "REDIS_URL={{ redis_url }}"
+  shell: "echo $REDIS_URL"
+  environment:
+    REDIS_URL: {{ redis_url }}
 
 - name: Install pip and redis
   apt:
