@@ -21,7 +21,6 @@ resource "proxmox_vm_qemu" "web_server" {
   name               = var.webserver_name
   vmid               = var.web_vmid
   description        = "Web server managed by Terraform"
-  tags               = "webserver,production"
   target_node        = var.proxmox_host
   clone              = var.webtemplate_name
   start_at_node_boot = true
