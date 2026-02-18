@@ -25,6 +25,7 @@ resource "proxmox_vm_qemu" "web_server" {
   target_node        = var.proxmox_host
   clone              = var.webtemplate_name
   start_at_node_boot = true
+  vm_state           = "running"
   agent              = 1
   os_type            = "cloud-init"
   memory             = var.vm_memory
@@ -65,7 +66,7 @@ resource "proxmox_vm_qemu" "web_server" {
 
   lifecycle {
     ignore_changes = [
-      network, ciuser, qemu_os, bootdisk
+      network, ciuser, qemu_os, bootdisk, startup_shutdown
     ]
   }
 
