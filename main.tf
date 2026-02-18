@@ -18,25 +18,34 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "web_server" {
-  name                    = var.webserver_name
-  vmid                    = var.web_vmid
-  desc                    = "Web server managed by Terraform"
-  tags                    = "webserver,production"
-  target_node             = var.proxmox_host
-  clone                   = var.webtemplate_name
-  onboot                  = true
-  cloudinit_cdrom_storage = var.storage_location
-  agent                   = 1
-  os_type                 = "cloud-init"
-  cores                   = var.cpu_cores
-  sockets                 = 1
-  cpu                     = "host"
-  memory                  = var.vm_memory
-  scsihw                  = "virtio-scsi-pci"
-  bootdisk                = "scsi0"
-  boot                    = "order=scsi0;ide3"
+  name               = var.webserver_name
+  vmid               = var.web_vmid
+  description        = "Web server managed by Terraform"
+  tags               = "webserver,production"
+  target_node        = var.proxmox_host
+  clone              = var.webtemplate_name
+  start_at_node_boot = true
+  agent              = 1
+  os_type            = "cloud-init"
+  memory             = var.vm_memory
+  scsihw             = "virtio-scsi-pci"
+  bootdisk           = "scsi0"
+  boot               = "order=scsi0"
+
+  cpu {
+    cores   = var.cpu_cores
+    sockets = 1
+    type    = "host"
+  }
 
   disks {
+    ide {
+      ide2 {
+        cloudinit {
+          storage = var.storage_location
+        }
+      }
+    }
     scsi {
       scsi0 {
         disk {
@@ -49,6 +58,7 @@ resource "proxmox_vm_qemu" "web_server" {
   }
 
   network {
+    id     = 0
     model  = "virtio"
     bridge = "vmbr_srvr"
   }
