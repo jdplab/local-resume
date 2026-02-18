@@ -54,7 +54,7 @@ def index():
         logging.error(f"Error in index route: {e}")
         raise
 
-@app.route("/JonathanPolanskyResume.docx")
+@app.route("/JonathanPolanskyResume.pdf")
 def static_from_root():
     try:
         return send_from_directory(app.static_folder, request.path[1:])

@@ -19,3 +19,4 @@ override.tf.json
 
 # Lock file should be committed to pin provider versions
 # (do not add .terraform.lock.hcl here)
+/JonathanPolanskyResume.pdf
