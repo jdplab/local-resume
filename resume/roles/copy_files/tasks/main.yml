@@ -1,3 +1,11 @@
+- name: Create Flask log directory
+  file:
+    path: /var/log/flask
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0750'
+
 - name: Copy frontend files
   copy:
     src: frontend

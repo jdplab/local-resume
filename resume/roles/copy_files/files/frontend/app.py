@@ -47,7 +47,7 @@ def index():
         stats = {"visitor_count": get_visitor_count(), "unique_visitors": get_unique_visitors_count()}
         
         response = make_response(render_template('index.html', stats=stats))
-        response.set_cookie('visitor_id', visitor_id, max_age=60*60*24*30, path='/')  # Ensure cookie is accessible site-wide
+        response.set_cookie('visitor_id', visitor_id, max_age=60*60*24*30, path='/', httponly=True, samesite='Lax')
         logging.debug(f"Set cookie with visitor ID: {visitor_id}")
         return response
     except Exception as e:
