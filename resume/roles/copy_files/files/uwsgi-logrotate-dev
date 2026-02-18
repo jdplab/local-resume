@@ -1,15 +1,15 @@
-/tmp/flask.log {
+/var/log/flask/uwsgi.log {
     daily
     missingok
     notifempty
     compress
     delaycompress
-    create 0777 www-data www-data
+    create 0640 www-data www-data
     copytruncate
     dateext
     dateformat -%Y-%m-%d
     postrotate
-        mv /tmp/flask.log-$(date +%Y-%m-%d -d "yesterday")* /mnt/nfs/dev;
-        find /mnt/nfs/dev/flask.log-* -mtime +30 -exec rm {} \;
+        mv /var/log/flask/uwsgi.log-$(date +%Y-%m-%d -d "yesterday")* /mnt/nfs/dev/;
+        find /mnt/nfs/dev/uwsgi.log-* -mtime +30 -exec rm {} \;
     endscript
 }

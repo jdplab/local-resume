@@ -16,9 +16,10 @@
     name: "{{ item }}"
     state: present
   loop:
-    - flask
-    - uwsgi
-    - gevent
-    - flask-sse
+    - flask==3.0.3
+    - uWSGI==2.0.31
+    - gevent==24.2.1
+    - Flask-SSE==1.0.0
+    - redis==6.1.1
   notify:
     - Restart flaskapp service

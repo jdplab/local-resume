@@ -8,7 +8,7 @@
 
 - name: Set resume permissions
   file:
-    path: /srv/frontend/static/JonathanPolanskyResume.docx
+    path: /srv/frontend/static/JonathanPolanskyResume.pdf
     mode: "u+r"
     owner: www-data
     group: www-data
