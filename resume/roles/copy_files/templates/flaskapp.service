@@ -5,6 +5,8 @@ After=network.target
 [Service]
 User=www-data
 WorkingDirectory=/srv/frontend
+Environment="SECRET_KEY={{ secret_key }}"
+Environment="REDIS_URL={{ redis_url }}"
 ExecStart=/usr/local/bin/uwsgi --ini flask.ini
 
 [Install]

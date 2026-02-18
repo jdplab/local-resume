@@ -1,1 +1,21 @@
 .vscode
+.claude
+
+# Terraform — state files may contain secrets; never commit them
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+crash.log
+
+# Variable files likely contain credentials
+*.tfvars
+*.tfvars.json
+
+# Override files are local-only by convention
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lock file should be committed to pin provider versions
+# (do not add .terraform.lock.hcl here)
