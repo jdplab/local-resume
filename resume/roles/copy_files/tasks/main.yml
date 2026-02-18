@@ -9,7 +9,7 @@
     - Restart flaskapp service
 
 - name: Copy flaskapp.service
-  copy:
+  template:
     src: flaskapp.service
     dest: /etc/systemd/system/flaskapp.service
     force: true
